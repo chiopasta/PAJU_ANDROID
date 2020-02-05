@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">SUNGMIN-ANDROID</string>
+    <string name="app_name">SUNGMIN_ANDROID</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="default_notification_channel_id">sungmin_i</string>
 </resources>
