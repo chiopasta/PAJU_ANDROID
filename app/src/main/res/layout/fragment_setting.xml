@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/setting_account_bt"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
+        android:text="계정"
+        android:textSize="20sp"
+        android:gravity="left"
+        android:layout_width="match_parent"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/setting_multy_login_bt"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:text="로그인정보"
+        android:gravity="left"
+        android:textSize="20sp"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</LinearLayout>

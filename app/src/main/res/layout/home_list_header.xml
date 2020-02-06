@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#B1BCBE"
+    android:orientation="vertical">
+
+
+    <RelativeLayout
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:id="@+id/main_info_rl"
+        android:background="@drawable/layout_bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="15dp">
+
+        <ImageView
+            android:id="@+id/info_iv"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="20dp"
+            android:padding="15dp"
+            android:src="@drawable/profileimage"
+            android:layout_width="80dp"
+            android:layout_height="80dp"/>
+
+
+        <TextView
+            android:id="@+id/info_username_tx"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/info_iv"
+            android:layout_centerVertical="true"
+            android:text="test"
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/info_user_id_tx"
+            android:textColor="@android:color/darker_gray"
+            android:layout_above="@id/info_username_tx"
+            android:layout_alignLeft="@id/info_username_tx"
+            android:text="SSC001234"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"/>
+
+        <TextView
+            android:id="@+id/info_user_age_tx"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:textSize="25sp"
+            android:layout_marginRight="30dp"
+            android:text="6세"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/info_class_name_tx"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:paddingTop="15dp"
+            android:layout_alignLeft="@id/info_username_tx"
+            android:layout_below="@id/info_username_tx"
+            android:text="명지국제유치원 행복한반5"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/info_user_commute_tx"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@id/info_class_name_tx"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="30dp"
+            android:paddingTop="15dp"
+            android:text="차량"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="15sp"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:background="@drawable/layout_bg"
+        android:id="@+id/main_teacher_info_rl"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_below="@+id/main_info_rl"
+        >
+
+        <TextView
+            android:layout_centerVertical="true"
+            android:text="선생님"
+            android:textSize="17sp"
+            android:layout_marginLeft="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="30dp"
+            android:id="@+id/teacher_tx"
+            android:layout_width="wrap_content"
+            android:textSize="15sp"
+            android:layout_height="wrap_content"
+            android:text="선생님" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:background="@drawable/layout_bg"
+        android:id="@+id/home_attend_rl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/main_teacher_info_rl"
+        >
+
+        <Switch
+            android:id="@+id/late_absent_switch"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:showText="true"
+            android:switchMinWidth="0dp"
+            android:textOff="지각"
+            android:textOn="결석"
+            android:textSize="5sp"
+            android:thumb="@drawable/switch_thumb"
+            android:track="@drawable/switch_track_selector" />
+
+        <Button
+            android:id="@+id/late_absent_send_bt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/late_absent_switch"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="30dp"
+            android:text="보내기" />
+
+        <EditText
+            android:id="@+id/absent_reason_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/late_absent_send_bt"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:hint="사유를 간단히 입력해주세요" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:background="@drawable/layout_bg"
+        android:id="@+id/main_meal_rl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/home_attend_rl">
+
+        <TextView
+            android:id="@+id/meal_date_tx"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:paddingLeft="10dp"
+            android:text="오늘의 식단" />
+
+        <TextView
+            android:id="@+id/meal_menu_tx"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/meal_date_tx"
+            android:paddingLeft="10dp" />
+
+        <com.ortiz.touchview.TouchImageView
+            android:layout_marginTop="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_below="@+id/meal_menu_tx"
+            android:id="@+id/meal_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_marginTop="10dp"
+        android:background="@drawable/layout_bg_gray"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/home_attend_rl">
+
+        <TextView
+            android:textColor="@android:color/black"
+            android:text="모바일 알림 목록"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp" />
+
+    </RelativeLayout>
+
+</LinearLayout>

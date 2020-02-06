@@ -1,0 +1,381 @@
+{
+  "project_info": {
+    "project_number": "827001350798",
+    "firebase_url": "https://bitxflow-android.firebaseio.com",
+    "project_id": "bitxflow-android",
+    "storage_bucket": "bitxflow-android.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:827001350798:android:e357224c16b6bfb8",
+        "android_client_info": {
+          "package_name": "com.bitxflow.bitxflow_android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "827001350798-5r3t4avlnorad47vlpr0kogscdhbfst2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bitxflow.bitxflow_android",
+            "certificate_hash": "cb0aeeb8a1c3eb46f3d4437f41827da649151877"
+          }
+        },
+        {
+          "client_id": "827001350798-lrc0qblo98q4qocvl1s2rn5aibhkqroj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bitxflow.bitxflow_android",
+            "certificate_hash": "70a4b6d1b8079016507a0bdcaf225e861fd7d6d2"
+          }
+        },
+        {
+          "client_id": "827001350798-2cm4m2ac7s02lre8emu3dkb8k698706u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEs8mUIW10-2DRM_m-b5aq_ZJ-vqy6hZI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "827001350798-2cm4m2ac7s02lre8emu3dkb8k698706u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:827001350798:android:f04a2d3a708a13d4",
+        "android_client_info": {
+          "package_name": "com.bitxflow.bitxflow_android_circle"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "827001350798-60ph388ak2qnkn0tlk9keit0r2m03aou.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bitxflow.bitxflow_android_circle",
+            "certificate_hash": "70a4b6d1b8079016507a0bdcaf225e861fd7d6d2"
+          }
+        },
+        {
+          "client_id": "827001350798-gku35p3lfm8fbs67gv81nm5rl0p743fr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bitxflow.bitxflow_android_circle",
+            "certificate_hash": "cb0aeeb8a1c3eb46f3d4437f41827da649151877"
+          }
+        },
+        {
+          "client_id": "827001350798-2cm4m2ac7s02lre8emu3dkb8k698706u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEs8mUIW10-2DRM_m-b5aq_ZJ-vqy6hZI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "827001350798-2cm4m2ac7s02lre8emu3dkb8k698706u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:827001350798:android:87066cece201648f",
+        "android_client_info": {
+          "package_name": "com.bitxflow.circle"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "827001350798-2cm4m2ac7s02lre8emu3dkb8k698706u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEs8mUIW10-2DRM_m-b5aq_ZJ-vqy6hZI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "827001350798-2cm4m2ac7s02lre8emu3dkb8k698706u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:827001350798:android:925c7cb6397426a5",
+        "android_client_info": {
+          "package_name": "com.bitxflow.dnk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "827001350798-m0au189ncrcm6j6gahfporj1kf9eq37c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bitxflow.dnk",
+            "certificate_hash": "70a4b6d1b8079016507a0bdcaf225e861fd7d6d2"
+          }
+        },
+        {
+          "client_id": "827001350798-2cm4m2ac7s02lre8emu3dkb8k698706u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEs8mUIW10-2DRM_m-b5aq_ZJ-vqy6hZI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "827001350798-2cm4m2ac7s02lre8emu3dkb8k698706u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:827001350798:android:800179081ca7bb14",
+        "android_client_info": {
+          "package_name": "com.bitxflow.gnk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "827001350798-6sr3iajm279vv9sogmi3gkenb0d4d6l8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bitxflow.gnk",
+            "certificate_hash": "70a4b6d1b8079016507a0bdcaf225e861fd7d6d2"
+          }
+        },
+        {
+          "client_id": "827001350798-2cm4m2ac7s02lre8emu3dkb8k698706u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEs8mUIW10-2DRM_m-b5aq_ZJ-vqy6hZI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "827001350798-2cm4m2ac7s02lre8emu3dkb8k698706u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:827001350798:android:52cc18f39f89d340",
+        "android_client_info": {
+          "package_name": "com.bitxflow.myungji"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "827001350798-4bdg6tc5vp6cjqicjuaei4o0ncfetbpi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bitxflow.myungji",
+            "certificate_hash": "70a4b6d1b8079016507a0bdcaf225e861fd7d6d2"
+          }
+        },
+        {
+          "client_id": "827001350798-2cm4m2ac7s02lre8emu3dkb8k698706u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEs8mUIW10-2DRM_m-b5aq_ZJ-vqy6hZI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "827001350798-2cm4m2ac7s02lre8emu3dkb8k698706u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:827001350798:android:3d09bb2d644e45b5",
+        "android_client_info": {
+          "package_name": "com.bitxflow.pjik"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "827001350798-1vcrghvif18itb24oqruso6mbk6ofuvi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bitxflow.pjik",
+            "certificate_hash": "70a4b6d1b8079016507a0bdcaf225e861fd7d6d2"
+          }
+        },
+        {
+          "client_id": "827001350798-2cm4m2ac7s02lre8emu3dkb8k698706u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEs8mUIW10-2DRM_m-b5aq_ZJ-vqy6hZI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "827001350798-2cm4m2ac7s02lre8emu3dkb8k698706u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:827001350798:android:3e868ec7cedd5224",
+        "android_client_info": {
+          "package_name": "com.bitxflow.sik"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "827001350798-5qu3121ahar17ikhai9oalg9q3uc0top.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bitxflow.sik",
+            "certificate_hash": "70a4b6d1b8079016507a0bdcaf225e861fd7d6d2"
+          }
+        },
+        {
+          "client_id": "827001350798-2cm4m2ac7s02lre8emu3dkb8k698706u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEs8mUIW10-2DRM_m-b5aq_ZJ-vqy6hZI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "827001350798-2cm4m2ac7s02lre8emu3dkb8k698706u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:827001350798:android:4ff3191b319c36b8",
+        "android_client_info": {
+          "package_name": "com.bitxflow.sungmin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "827001350798-ljfv6dve5r4jdqqgi1eabuprsli65d5b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bitxflow.sungmin",
+            "certificate_hash": "70a4b6d1b8079016507a0bdcaf225e861fd7d6d2"
+          }
+        },
+        {
+          "client_id": "827001350798-2cm4m2ac7s02lre8emu3dkb8k698706u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEs8mUIW10-2DRM_m-b5aq_ZJ-vqy6hZI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "827001350798-2cm4m2ac7s02lre8emu3dkb8k698706u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:827001350798:android:ccd9d950e95b2092b777df",
+        "android_client_info": {
+          "package_name": "com.bitxflow.sungmin_android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "827001350798-2cm4m2ac7s02lre8emu3dkb8k698706u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEs8mUIW10-2DRM_m-b5aq_ZJ-vqy6hZI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "827001350798-2cm4m2ac7s02lre8emu3dkb8k698706u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

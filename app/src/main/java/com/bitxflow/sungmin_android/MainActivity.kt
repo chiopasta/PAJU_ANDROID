@@ -2,17 +2,17 @@ package com.bitxflow.sungmin_android
 
 import android.app.Activity
 import android.content.Intent
+import android.database.Cursor
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Process
+import android.provider.MediaStore
 import android.util.Log
-import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.bitxflow.sungmin_android.DB.MemberDatabase
-import com.bitxflow.sungmin_android.DB.User
 import com.bitxflow.sungmin_android.biz.board.AllBoardFragment
 import com.bitxflow.sungmin_android.biz.board.BoardFragment
 import com.bitxflow.sungmin_android.biz.calendar.CalendarFragment
@@ -24,7 +24,6 @@ import com.bitxflow.sungmin_android.biz.setting.SettingFragment
 import com.bitxflow.sungmin_android.biz.splash.SplashActivity
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.iid.FirebaseInstanceId
-import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -43,7 +42,7 @@ class MainActivity : AppCompatActivity() {
     private val CALENDAR = 6
     private val SETTING = 7
 
-
+    private val GALLERY = 100
     private var userDB: MemberDatabase? = null
 
     private var menu_move_y: Int = 0
@@ -84,77 +83,25 @@ class MainActivity : AppCompatActivity() {
 //        thread.start()
 
         //////////////////// BOTTOM NAV ///////////////////////
-        ///bottom Nav 최소크기
-        bottom_nav_height = bottom_nav_rl.layoutParams.height
+        var close_menu = true
 
-        bottom_nav_rl.setOnTouchListener { _: View, event: MotionEvent ->
-
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    menu_move_y = event.rawY.toInt()
-                    ori_height = bottom_nav_rl.layoutParams.height
-                }
-                MotionEvent.ACTION_MOVE -> {
-                    val new_height: Int
-                    new_height = menu_move_y - event.rawY.toInt()
-
-                    if (ori_height > bottom_nav_height) {
-                        if (new_height in -bottom_nav_height * 2..bottom_nav_height) {
-                            if (ori_height + new_height > bottom_nav_height) {
-                                bottom_nav_rl.layoutParams.height = ori_height + new_height
-                                bottom_nav_rl.invalidate()
-                                bottom_nav_rl.requestLayout()
-                            }
-                        }
-                    } else {
-                        if (new_height in bottom_nav_height..bottom_nav_height * 4) {
-                            bottom_nav_rl.layoutParams.height = new_height
-
-                            bottom_nav_rl.invalidate()
-                            bottom_nav_rl.requestLayout()
-                        }
-                    }
-                }
-
+        bottom_hold_rl.setOnClickListener{
+            if(close_menu) {
+                val ori_height = bottom_nav_rl.layoutParams.height
+                bottom_nav_rl.layoutParams.height = ori_height * 2
+                bottom_nav_rl.invalidate()
+                bottom_nav_rl.requestLayout()
+                close_menu = false
             }
-            true // or false
-        }
-
-        bottom_hold_rl.setOnTouchListener { _: View, event: MotionEvent ->
-
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    menu_move_y = event.rawY.toInt()
-                    ori_height = bottom_nav_rl.layoutParams.height
-                }
-                MotionEvent.ACTION_MOVE -> {
-                    val new_height: Int
-                    new_height = menu_move_y - event.rawY.toInt()
-
-                    if (ori_height > bottom_nav_height) {
-                        if (new_height in -bottom_nav_height * 2..bottom_nav_height) {
-                            if (ori_height + new_height > bottom_nav_height) {
-                                bottom_nav_rl.layoutParams.height = ori_height + new_height
-                                bottom_nav_rl.invalidate()
-                                bottom_nav_rl.requestLayout()
-                            }
-                        }
-                    } else {
-                        if (new_height in bottom_nav_height..bottom_nav_height * 4) {
-                            bottom_nav_rl.layoutParams.height = new_height
-
-                            bottom_nav_rl.invalidate()
-                            bottom_nav_rl.requestLayout()
-                        }
-                    }
-                }
-
+            else
+            {
+                val ori_height = bottom_nav_rl.layoutParams.height
+                bottom_nav_rl.layoutParams.height = ori_height / 2
+                bottom_nav_rl.invalidate()
+                bottom_nav_rl.requestLayout()
+                close_menu = true
             }
-            true // or false
         }
-
-
-
 
         nav_home_ll.setOnClickListener(View.OnClickListener {
             if (mCurrentFragmentIndex != HOME) {
@@ -296,6 +243,27 @@ class MainActivity : AppCompatActivity() {
                         user_id = backPress.toString()
                         mCurrentFragmentIndex = HOME
                         fragmentReplace(mCurrentFragmentIndex)
+                    }
+                }
+                GALLERY ->{
+                    if (resultCode === Activity.RESULT_OK) {
+                        try {
+                            Log.d("bitx_log","data ? " + data!!.data)
+                            val selectedImage = data!!.data
+                            val filePathColumn =
+                                arrayOf(MediaStore.Images.Media.DATA)
+                            val cursor: Cursor = this.getContentResolver()
+                                .query(selectedImage, filePathColumn, null, null, null)
+
+                            cursor.moveToFirst()
+                            val columnIndex: Int = cursor.getColumnIndex(filePathColumn[0])
+                            val picturePath: String = cursor.getString(columnIndex)
+                            Log.d("bitx_log","file path :" + picturePath)
+
+                        } catch (e: Exception) {
+                        }
+                    } else if (resultCode === Activity.RESULT_CANCELED) {
+                        Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show()
                     }
                 }
             }

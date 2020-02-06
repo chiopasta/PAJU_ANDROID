@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".biz.setting.AccountActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:id="@+id/main_title_bar"
+        android:background="#B1BCBE">
+        <ImageView
+            android:layout_marginTop="5dp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/navi_logo"
+            android:layout_marginBottom="5dp"
+            android:layout_width="150dp"
+            android:layout_height="60dp"/>
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/pw_bt"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
+        android:text="비밀번호 변경"
+        android:textSize="20sp"
+        android:gravity="left"
+        android:layout_width="match_parent"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/phone_bt"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:gravity="left"
+        android:text="전화번호 변경"
+        android:textSize="20sp"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/address_bt"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:text="주소 변경"
+        android:textSize="20sp"
+        android:gravity="left"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/logout_bt"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:text="로그아웃"
+        android:textSize="20sp"
+        android:gravity="left"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>
