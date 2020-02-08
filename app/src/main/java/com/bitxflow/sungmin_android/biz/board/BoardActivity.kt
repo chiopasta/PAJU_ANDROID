@@ -196,7 +196,6 @@ class BoardActivity : AppCompatActivity() {
                     )
 
                     builder.setPositiveButton("네") { dialog, which ->
-                        checkPermission()
                         saveDrawable(iv,img_url.drop(22),applicationContext)
                         Toast.makeText(applicationContext, "저장 되었습니다.", Toast.LENGTH_SHORT).show()
 
@@ -293,27 +292,4 @@ class BoardActivity : AppCompatActivity() {
         }
     }
 
-    private fun checkPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED
-                || checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED
-            ) { // Should we show an explanation?
-                if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) { // Explain to the user why we need to write the permission.
-                    Toast.makeText(this, "Read/Write external storage", Toast.LENGTH_SHORT).show()
-                }
-                requestPermissions(
-                    arrayOf(
-                        Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                    ),
-                    MY_PERMISSION_REQUEST_STORAGE
-                )
-                // MY_PERMISSION_REQUEST_STORAGE is an
-// app-defined int constant
-            } else { // 다음 부분은 항상 허용일 경우에 해당이 됩니다.
-            }
-        }
-    }
 }

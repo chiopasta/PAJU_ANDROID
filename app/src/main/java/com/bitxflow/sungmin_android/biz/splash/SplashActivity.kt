@@ -1,10 +1,13 @@
 package com.bitxflow.sungmin_android.biz.splash
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.AsyncTask
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.widget.ProgressBar
@@ -32,7 +35,7 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
 
         var users : List<User>? = null
-
+        checkPermission()
         pbar = splash_progressBar
 
         pbar!!.progressDrawable
@@ -63,6 +66,8 @@ class SplashActivity : AppCompatActivity() {
                 startActivityForResult(nextIntent,LOGIN_ACTIVITY)
             }
         }
+
+
 
         val thread = Thread(getUserRunable)
         thread.start()
@@ -114,6 +119,30 @@ class SplashActivity : AppCompatActivity() {
                     pbar!!.progress = 100
                     finish()
                 }
+            }
+        }
+    }
+
+    fun checkPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED
+                || checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED
+            ) { // Should we show an explanation?
+                if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) { // Explain to the user why we need to write the permission.
+                    Toast.makeText(this, "Read/Write external storage", Toast.LENGTH_SHORT).show()
+                }
+                requestPermissions(
+                    arrayOf(
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    ),
+                    100
+                )
+                // MY_PERMISSION_REQUEST_STORAGE is an
+// app-defined int constant
+            } else { // 다음 부분은 항상 허용일 경우에 해당이 됩니다.
             }
         }
     }

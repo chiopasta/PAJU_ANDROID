@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment
 import com.bitxflow.sungmin_android.DB.MemberDatabase
 import com.bitxflow.sungmin_android.DB.User
 import com.bitxflow.sungmin_android.R
+import com.bitxflow.sungmin_android.biz.board.BoardActivity
 import com.bitxflow.sungmin_android.send.SendServer
 import com.bitxflow.sungmin_android.util.DownloadImage
 import com.google.firebase.messaging.FirebaseMessaging
@@ -191,9 +192,82 @@ class HomeFragment : Fragment() {
             activity!!.main_progressText.text = ""
             activity!!.main_progressbar.visibility = View.GONE
 
+            val header: View =
+                layoutInflater.inflate(R.layout.home_list_header, null, false)
+
+            val footer: View =
+                layoutInflater.inflate(R.layout.home_list_footer, null, false)
+
+            InfoTask().execute(user_id)
+            mealTask().execute()
+
+            /////////////// ATTEND /////////////////////////////////
+            header.late_absent_switch.setOnCheckedChangeListener { buttonView, isChecked ->
+                isAbsent = isChecked
+            }
+
+            header.late_absent_send_bt.setOnClickListener {
+                val reason: String = absent_reason_et.text.toString()
+
+                if (reason.equals(""))
+                    Toast.makeText(context, "사유를 적어주세요", Toast.LENGTH_SHORT).show()
+                else {
+                    val cal: Calendar = Calendar.getInstance()
+                    val year = cal[Calendar.YEAR]
+                    val month = cal[Calendar.MONTH] + 1
+                    val day = cal[Calendar.DAY_OF_MONTH]
+
+                    val builder = AlertDialog.Builder(context)
+
+                    val absent = when{
+                        isAbsent -> "결석" //결석
+                        else -> "지각" //지각
+                    }
+
+                    val status = when{
+                        isAbsent -> "2" //결석
+                        else -> "1" //지각
+                    }
+
+                    builder.setTitle("" + absent + "알리기")
+                    builder.setMessage(
+                        "" + year + "년" + month + "월" + day + "일" + "\n"
+                                + "유치원에 " + absent + " 메시지를 보냅니다."
+                    )
+
+                    builder.setPositiveButton("YES") { _, _ ->
+                        SendAttendTask().execute(status,reason)
+                    }
+
+                    builder.setNeutralButton("Cancel") { dialog, _ ->
+                        dialog.dismiss()
+                    }
+
+                    val dialog: AlertDialog = builder.create()
+                    dialog.show()
+
+                }
+
+            }
+
+            mobilePush_listView.addHeaderView(header)
+            mobilePush_listView.addFooterView(footer)
+
             if (result.equals("fail")) {
-                //TODO array List 에 내용없음 추가
-//                Toast.makeText(context,"")
+                var noticeList: MutableList<String> = ArrayList()
+
+                noticeList.add("모바일 알림이 없습니다")
+                if(isAdded) {
+                    adapter = ArrayAdapter(
+                        activity,
+                        android.R.layout.simple_list_item_1,
+                        noticeList
+                    )
+
+                    mobilePush_listView.adapter = adapter
+
+                    adapter!!.notifyDataSetChanged()
+                }
             } else {
                 val `object` = JSONObject(result)
                 val notices = `object`.getJSONArray("noticeList")
@@ -250,61 +324,6 @@ class HomeFragment : Fragment() {
                         dialog.show()
                     }
 
-                    val header: View =
-                        layoutInflater.inflate(R.layout.home_list_header, null, false)
-
-                    val footer: View =
-                        layoutInflater.inflate(R.layout.home_list_footer, null, false)
-
-                    InfoTask().execute(user_id)
-                    mealTask().execute()
-
-                    /////////////// ATTEND /////////////////////////////////
-                    header.late_absent_switch.setOnCheckedChangeListener { buttonView, isChecked ->
-                        isAbsent = isChecked
-                    }
-
-                    header.late_absent_send_bt.setOnClickListener {
-                        val reason: String = absent_reason_et.text.toString()
-
-                        if (reason.equals(""))
-                            Toast.makeText(context, "사유를 적어주세요", Toast.LENGTH_SHORT).show()
-                        else {
-                            val cal: Calendar = Calendar.getInstance()
-                            val year = cal[Calendar.YEAR]
-                            val month = cal[Calendar.MONTH] + 1
-                            val day = cal[Calendar.DAY_OF_MONTH]
-
-                            val builder = AlertDialog.Builder(context)
-
-                            var absent: String
-
-                            if (isAbsent) absent = "결석"
-                            else absent = "지각"
-
-                            builder.setTitle("" + absent + "알리기")
-                            builder.setMessage(
-                                "" + year + "년" + month + "월" + day + "일" + "\n"
-                                        + "유치원에 " + absent + " 메시지를 보냅니다."
-                            )
-
-                            builder.setPositiveButton("YES") { dialog, which ->
-                                Toast.makeText(context, "SEND.", Toast.LENGTH_SHORT).show()
-                            }
-
-                            builder.setNeutralButton("Cancel") { dialog, _ ->
-                                dialog.dismiss()
-                            }
-
-                            val dialog: AlertDialog = builder.create()
-                            dialog.show()
-
-                        }
-
-                    }
-
-                    mobilePush_listView.addHeaderView(header)
-                    mobilePush_listView.addFooterView(footer)
 
                     adapter!!.notifyDataSetChanged()
                 }
@@ -313,5 +332,19 @@ class HomeFragment : Fragment() {
     }
 
 
+    internal inner class SendAttendTask : AsyncTask<String, String, String>() {
+
+        override fun doInBackground(vararg params: String): String {
+            val su = SendServer()
+            return su.SendAttend(params[0],params[1])
+        }
+
+        override fun onPostExecute(result: String) {
+            if(result.equals("fail"))
+                Toast.makeText(context,"다시 시도해 주세요",Toast.LENGTH_SHORT).show()
+            else
+                Toast.makeText(context,"처리 되었습니다 ",Toast.LENGTH_SHORT).show()
+        }
+    }
 
 }

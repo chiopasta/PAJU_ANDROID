@@ -53,20 +53,19 @@ class SendServer {
         var line = "fail"
         try {
 //            httpclient = DefaultHttpClient()
-            //TODO
             var Sungmin = true
             if (id.substring(0, 3).equals("SSC", ignoreCase = true)) {
                 Localhost.localhost = "http://sungmin-i.net/"
 //                Localhost.localhost = "http://192.168.0.13/"
             }
-//            else if (id.substring(0, 3).equals("JSC", ignoreCase = true))
-//                localhost = "http://suji-sungmin-i.net/"
-//            else if (id.substring(0, 3).equals("NSC", ignoreCase = true))
-//                localhost = "http://s2-sungmin-i.net/"
-//            else if (id.substring(0, 3).equals("HSC", ignoreCase = true))
-//                localhost = "http://hwasan-sungmin-i.net/"
-//            else if (id.substring(0, 3).equals("GSC", ignoreCase = true))
-//                localhost = "http://gugal-sungmin-i.net/"
+            else if (id.substring(0, 3).equals("JSC", ignoreCase = true))
+                localhost = "http://suji-sungmin-i.net/"
+            else if (id.substring(0, 3).equals("NSC", ignoreCase = true))
+                localhost = "http://s2-sungmin-i.net/"
+            else if (id.substring(0, 3).equals("HSC", ignoreCase = true))
+                localhost = "http://hwasan-sungmin-i.net/"
+            else if (id.substring(0, 3).equals("GSC", ignoreCase = true))
+                localhost = "http://gugal-sungmin-i.net/"
             else
                 Sungmin = false
 
@@ -166,6 +165,27 @@ class SendServer {
         return line
     }
 
+    @Suppress("DEPRECATION")
+    fun SendAttend(attendstatus: String,reason : String): String {
+        var line = "fail"
+        try {
+            val httppost = HttpPost(Localhost.localhost + "android/attendupdate.do")
+            val responseHandler = BasicResponseHandler()
+            val nameValuePairs = ArrayList<NameValuePair>(2)
+            nameValuePairs.add(BasicNameValuePair("attendstatus", attendstatus))
+            nameValuePairs.add(BasicNameValuePair("reason",reason))
+            httppost.setEntity(UrlEncodedFormEntity(nameValuePairs))
+            val response = Localhost.httpclinet!!.execute(httppost)
+            val responseString = EntityUtils.toString(response.getEntity(), "UTF_8")
+            line = responseString
+
+        } catch (e: Exception) {
+            Log.d("bitx_log", "error:$e")
+        }
+
+        return line
+    }
+
     //TODO classname -> classSid (서버랑 같이작업)
     @Suppress("DEPRECATION")
     fun getPhotoList(userid : String,classname : String , page : String): String {
@@ -255,7 +275,7 @@ class SendServer {
         return line
     }
 
-
+    @Suppress("DEPRECATION")
     fun getMeal(): String {
         var line = "fail"
 
