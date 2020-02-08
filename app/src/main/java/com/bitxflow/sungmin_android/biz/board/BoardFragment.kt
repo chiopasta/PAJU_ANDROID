@@ -77,44 +77,47 @@ class BoardFragment : Fragment() {
             activity!!.main_progressText.text = ""
             activity!!.main_progressbar.visibility = View.GONE
 
-            val `object` = JSONObject(result)
-            val count: Int = `object`.getInt("count")
-            val homeLetterList = `object`.getJSONArray("list")
+            try {
+                val `object` = JSONObject(result)
+                val count: Int = `object`.getInt("count")
+                val homeLetterList = `object`.getJSONArray("list")
 
-            var noticeList: MutableList<String> = ArrayList()
-            var titleList: MutableList<String> = ArrayList()
-            var sidList: MutableList<String> = ArrayList()
-            var contentsList: MutableList<String> = ArrayList()
+                var noticeList: MutableList<String> = ArrayList()
+                var titleList: MutableList<String> = ArrayList()
+                var sidList: MutableList<String> = ArrayList()
+                var contentsList: MutableList<String> = ArrayList()
 
-            for (i in 0 until count) {
-                val json = homeLetterList.getJSONObject(i)
-                noticeList.add(json.getString("date") + "\n" + json.getString("title"))
-                titleList!!.add(json.getString("title"))
-                sidList!!.add(json.getString("board_sid"))
-                contentsList!!.add(json.getString("contents"))
+                for (i in 0 until count) {
+                    val json = homeLetterList.getJSONObject(i)
+                    noticeList.add(json.getString("date") + "\n" + json.getString("title"))
+                    titleList!!.add(json.getString("title"))
+                    sidList!!.add(json.getString("board_sid"))
+                    contentsList!!.add(json.getString("contents"))
+                }
+
+                adapter = ArrayAdapter(
+                    activity,
+                    android.R.layout.simple_list_item_1,
+                    noticeList
+                )
+
+
+                fragment_board_listview.adapter = adapter
+                fragment_board_listview.setOnItemClickListener { parent, view, position, id ->
+                    val nextIntent = Intent(context, BoardActivity::class.java)
+                    nextIntent.putExtra("user_id", user_id)
+                    nextIntent.putExtra("board_sid", sidList[position])
+                    nextIntent.putExtra("contents", contentsList[position])
+                    nextIntent.putExtra("title", titleList[position])
+                    startActivity(nextIntent)
+                }
+
+                val footer: View =
+                    layoutInflater.inflate(R.layout.home_list_footer, null, false)
+                fragment_board_listview.addFooterView(footer)
+            }catch(e : Exception){
+
             }
-
-            adapter = ArrayAdapter(
-                activity,
-                android.R.layout.simple_list_item_1,
-                noticeList
-            )
-
-
-            fragment_board_listview.adapter = adapter
-            fragment_board_listview.setOnItemClickListener { parent, view, position, id ->
-                val nextIntent = Intent(context, BoardActivity::class.java)
-                nextIntent.putExtra("user_id", user_id)
-                nextIntent.putExtra("board_sid", sidList[position])
-                nextIntent.putExtra("contents", contentsList[position])
-                nextIntent.putExtra("title", titleList[position])
-                startActivity(nextIntent)
-            }
-
-            val footer: View =
-                layoutInflater.inflate(R.layout.home_list_footer, null, false)
-            fragment_board_listview.addFooterView(footer)
-
             activity!!.nav_home_ll.isClickable = true
             activity!!.nav_photo_ll.isClickable = true
             activity!!.nav_letter_ll.isClickable = true

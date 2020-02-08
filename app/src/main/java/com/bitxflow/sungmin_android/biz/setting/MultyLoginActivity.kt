@@ -39,7 +39,7 @@ class MultyLoginActivity : AppCompatActivity() {
 
                 val adduser = User()
                 adduser.userName = "계정추가"
-
+                adduser.imgSrc = ""
                 userList.add(adduser)
 
                 val userAdapter = MultyLoginListAdapter(this,userList)

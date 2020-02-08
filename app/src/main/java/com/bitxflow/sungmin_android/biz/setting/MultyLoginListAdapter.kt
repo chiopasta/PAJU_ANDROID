@@ -3,6 +3,7 @@ package com.bitxflow.sungmin_android.biz.setting
 import com.bitxflow.sungmin_android.biz.photo.Photo
 
 import android.content.Context
+import android.graphics.BitmapFactory
 import android.text.Html
 import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
@@ -54,6 +55,21 @@ class MultyLoginListAdapter(
             convertView.findViewById<View>(R.id.multy_login_iv) as ImageView
 
         name_tx.text = member[position].userName
+
+        val str = member[position].imgSrc
+//        if(str.equals("last"))
+//        {
+//            img_iv.setImageResource(R.drawable.profileimage)
+//        }
+        if(str!!.isNotEmpty())
+        {
+            val bmp = BitmapFactory.decodeFile(str)
+            img_iv.setImageBitmap(bmp)
+        }
+        else{
+            img_iv.setImageResource(R.drawable.profileimage)
+        }
+
 
 //        UrlImageViewHelper.setUrlDrawable(img_iv, member[position].)
 

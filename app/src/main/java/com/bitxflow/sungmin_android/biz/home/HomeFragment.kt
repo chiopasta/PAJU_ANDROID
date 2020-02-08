@@ -102,9 +102,7 @@ class HomeFragment : Fragment() {
                 val GALLERY = 100
                 info_iv.setOnClickListener {
                     val intent = Intent(Intent.ACTION_PICK)
-//                    intent.type = "image/*"
                     intent.type = MediaStore.Images.Media.CONTENT_TYPE
-//                    intent.action = Intent.ACTION_GET_CONTENT
                     activity!!.startActivityForResult(intent, GALLERY)
                 }
             }
@@ -120,8 +118,9 @@ class HomeFragment : Fragment() {
                     user!!.className = className
                     user!!.classSid = classSid
                     val str = user!!.imgSrc
+                    if(str!!.isNotEmpty()){
                     val bmp = BitmapFactory.decodeFile(str)
-                    info_iv.setImageBitmap(bmp)
+                    info_iv.setImageBitmap(bmp)}
                     userDB?.userDao()?.update(user)
 
                     val cal = Calendar.getInstance()
