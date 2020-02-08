@@ -2,6 +2,7 @@ package com.bitxflow.sungmin_android.biz.home
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.AsyncTask
 import android.os.Bundle
 import android.provider.MediaStore
@@ -118,9 +119,9 @@ class HomeFragment : Fragment() {
                     user!!.userName = userName
                     user!!.className = className
                     user!!.classSid = classSid
-                    val str = user!!.imgSrc!!.toUri()
-//                    info_iv.setImageURI(str)
-
+                    val str = user!!.imgSrc
+                    val bmp = BitmapFactory.decodeFile(str)
+                    info_iv.setImageBitmap(bmp)
                     userDB?.userDao()?.update(user)
 
                     val cal = Calendar.getInstance()
@@ -132,8 +133,7 @@ class HomeFragment : Fragment() {
                     val topic = "$upper-$year-$classSid"
 
                     FirebaseMessaging.getInstance().subscribeToTopic(topic)
-                        .addOnCompleteListener { task ->
-                            //                Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+                        .addOnCompleteListener {
                         }
 
                 } catch (e: Exception) {

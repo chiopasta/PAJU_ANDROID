@@ -2,6 +2,7 @@ package com.bitxflow.sungmin_android
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -28,6 +29,8 @@ import com.google.firebase.iid.FirebaseInstanceId
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.home_list_header.*
 import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 
 
 class MainActivity : AppCompatActivity() {
@@ -49,10 +52,6 @@ class MainActivity : AppCompatActivity() {
     private val CROP_FROM_CAMERA = 101
     private var userDB: MemberDatabase? = null
 
-    private var menu_move_y: Int = 0
-    private var ori_height: Int = 0
-    private var bottom_nav_height: Int = 0
-
     private var user_id: String = ""
 
     var isTwo: Boolean = false
@@ -67,26 +66,6 @@ class MainActivity : AppCompatActivity() {
 
         val nextIntent = Intent(this, SplashActivity::class.java)
         startActivityForResult(nextIntent, SPLASH_ACTIVITY)
-
-//        val testRunnable = Runnable {
-//
-//            userDB = MemberDatabase.getInstance(baseContext)
-//
-////            var user : User? = userDB?.userDao()?.getUser("ssc001236")
-//
-////            val users : List<User>? = userDB?.userDao()?.getUsers()
-//            val user = userDB?.userDao()?.getMultyLoginUser(true)
-//
-////            val str = user!!.imgSrc?.toUri()
-////            info_iv.setImageURI(str)
-//
-////            Log.d("bitx_log","str : $str")
-////            users = userDB?.userDao()?.getUsers()
-//
-//        }
-//
-//        val thread = Thread(testRunnable)
-//        thread.start()
 
         //////////////////// BOTTOM NAV ///////////////////////
         var close_menu = true
@@ -255,28 +234,11 @@ class MainActivity : AppCompatActivity() {
                             Log.d("bitx_log", "data ? " + data!!.data)
                             var mImageCaptureUri = data!!.data
 
-//                            info_iv.setImageURI(selectedImage)
-
-                            val testRunnable = Runnable {
-
-                                userDB = MemberDatabase.getInstance(baseContext)
-
-                                val user = userDB?.userDao()?.getUser(user_id)
-                                user!!.imgSrc = data!!.data.toString()
-                                userDB?.userDao()?.update(user)
-                            }
-
-                            val thread = Thread(testRunnable)
-                            thread.start()
-
-
                             grantUriPermission(
                                 "com.android.camera", mImageCaptureUri,
                                 Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION
                             )
                             val intent = Intent("com.android.camera.action.CROP")
-//				Intent intent = new Intent(thisContext,CropImage.class);
-                            //				Intent intent = new Intent(thisContext,CropImage.class);
                             intent.setDataAndType(mImageCaptureUri, "image/*")
                             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                             intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
@@ -286,30 +248,10 @@ class MainActivity : AppCompatActivity() {
                                 list[0].activityInfo.packageName, mImageCaptureUri,
                                 Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION
                             )
-                            //				intent.putExtra("outputX", 90);
-//				intent.putExtra("outputY", 90);
-//				intent.putExtra("aspectX", 1);
-//				intent.putExtra("aspectY", 1);
                             intent.putExtra("crop", "true")
-//                intent.putExtra("aspectX", 4);
-//                intent.putExtra("aspectY", 3);
-                            //                intent.putExtra("aspectX", 4);
-//                intent.putExtra("aspectY", 3);
                             intent.putExtra("scale", true)
-//                intent.putExtra("return-data", true);
-                            //                intent.putExtra("return-data", true);
+
                             intent.putExtra("return-data", true)
-
-//                            val filePathColumn =
-//                                arrayOf(MediaStore.Images.Media.DATA)
-//                            val cursor: Cursor = this.getContentResolver()
-//                                .query(selectedImage, filePathColumn, null, null, null)
-//
-//                            cursor.moveToFirst()
-//                            val columnIndex: Int = cursor.getColumnIndex(filePathColumn[0])
-//                            val picturePath: String = cursor.getString(columnIndex)
-//                            Log.d("bitx_log","file path :" + picturePath)
-
                             val imageFileName = user_id
                             val storageDir =
                                 File(Environment.getExternalStorageDirectory().toString() + "/imageDir/")
@@ -337,15 +279,20 @@ class MainActivity : AppCompatActivity() {
                         Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show()
                     }
 
-                    //                intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString()); //Bitmap 형태로 받기 위해 해당 작업 진행
-                    //                    mImageCaptureUri = FileProvider.getUriForFile(thisContext, thisContext.getPackageName() + ".fileprovider", image);
-
 
                 }
                 CROP_FROM_CAMERA ->
                 {
                     val selectedImage = data!!.data
                     info_iv.setImageURI(selectedImage)
+                    try {
+                        val bitmap =
+                            MediaStore.Images.Media.getBitmap(this.contentResolver, selectedImage)
+                        createImageFile(bitmap)
+                    }catch(e : Exception)
+                    {
+
+                    }
                 }
             }
         }
@@ -399,5 +346,41 @@ class MainActivity : AppCompatActivity() {
         init {
             isTwo = true
         }
+    }
+
+    @Throws(IOException::class)
+    private fun createImageFile(bitmapImage: Bitmap): File? { // Create an image file name
+        val imageFileName = user_id
+        val storageDir =
+            File(Environment.getExternalStorageDirectory().toString() + "/imageDir/")
+        if (!storageDir.exists()) {
+            storageDir.mkdirs()
+        }
+        val image = File.createTempFile(
+            imageFileName,
+            ".jpg",
+            storageDir
+        )
+        var fos: FileOutputStream? = null
+        try {
+            fos = FileOutputStream(image)
+            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos)
+            fos.close()
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        }
+        val testRunnable = Runnable {
+
+            userDB = MemberDatabase.getInstance(baseContext)
+
+            val user = userDB?.userDao()?.getUser(user_id)
+            user!!.imgSrc = image.absolutePath
+            userDB?.userDao()?.update(user)
+        }
+
+        val thread = Thread(testRunnable)
+        thread.start()
+
+        return image
     }
 }
