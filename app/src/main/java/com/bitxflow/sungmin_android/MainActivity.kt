@@ -174,9 +174,28 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getFragment(idx: Int): Fragment {
+
         var newFragment: Fragment? = null
         val bundle = Bundle()
-        bundle.putString("user_id", user_id)
+        var userDBcount = -1
+        val testRunnable = Runnable {
+
+            userDB = MemberDatabase.getInstance(baseContext)
+
+            val user = userDB?.userDao()?.getMultyLoginUser(true)
+            userDBcount = userDB?.userDao()?.getUsers()!!.size
+            user_id = user!!.userId.toString()
+            bundle.putString("user_id", user_id)
+        }
+
+        val thread = Thread(testRunnable)
+        thread.start()
+
+        if(userDBcount <= 0)
+        {
+            bundle.putString("user_id", user_id)
+        }
+
         when (idx) {
             HOME -> {
                 newFragment = HomeFragment()

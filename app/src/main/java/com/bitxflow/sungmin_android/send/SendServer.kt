@@ -10,7 +10,6 @@ import org.apache.http.client.entity.UrlEncodedFormEntity
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.impl.client.BasicResponseHandler
-import org.apache.http.impl.client.DefaultHttpClient
 import org.apache.http.message.BasicNameValuePair
 import org.apache.http.protocol.HTTP
 import org.apache.http.util.EntityUtils
@@ -18,11 +17,14 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.io.*
 import java.math.BigInteger
-import java.net.URI
+import java.net.HttpURLConnection
+import java.net.URL
 import java.net.URLEncoder
 import java.security.InvalidKeyException
 import java.security.KeyFactory
 import java.security.NoSuchAlgorithmException
+import java.security.SecureRandom
+import java.security.cert.X509Certificate
 import java.security.interfaces.RSAPublicKey
 import java.security.spec.InvalidKeySpecException
 import java.security.spec.RSAPublicKeySpec
@@ -31,6 +33,10 @@ import javax.crypto.BadPaddingException
 import javax.crypto.Cipher
 import javax.crypto.IllegalBlockSizeException
 import javax.crypto.NoSuchPaddingException
+import javax.net.ssl.HttpsURLConnection
+import javax.net.ssl.SSLContext
+import javax.net.ssl.TrustManager
+import javax.net.ssl.X509TrustManager
 
 
 class SendServer {
@@ -43,62 +49,94 @@ class SendServer {
         var httpclinet: HttpClient? = null
     }
 
-//        private val web_localhost = "http://222.233.185.212/"
+    private val localhost = "http://m.bitxdev.com/"
     private val web_localhost = "http://sungmin-i.com/"
 
 //    private val httpclient: HttpClient= DefaultHttpClient()
 
     @Suppress("DEPRECATION")
     fun Login(id: String, pw: String, regId: String): String {
-        var line = "fail"
-        try {
-//            httpclient = DefaultHttpClient()
-            var Sungmin = true
-            if (id.substring(0, 3).equals("SSC", ignoreCase = true)) {
-                Localhost.localhost = "http://sungmin-i.net/"
-//                Localhost.localhost = "http://192.168.0.13/"
+
+//        var reqParam = URLEncoder.encode("userid", "UTF-8") + "=" + URLEncoder.encode(id, "UTF-8")
+//        reqParam += "&" + URLEncoder.encode("password", "UTF-8") + "=" + URLEncoder.encode(pw, "UTF-8")
+//        val mURL = URL(localhost+"login")
+//
+//        with(mURL.openConnection() as HttpURLConnection) {
+//            // optional default is GET
+//            requestMethod = "POST"
+//
+//            val wr = OutputStreamWriter(getOutputStream());
+//            wr.write(reqParam);
+//            wr.flush();
+//
+//            println("URL : $url")
+//            println("Response Code : $responseCode")
+//
+//            BufferedReader(InputStreamReader(inputStream)).use {
+//                val response = StringBuffer()
+//
+//                var inputLine = it.readLine()
+//                while (inputLine != null) {
+//                    response.append(inputLine)
+//                    inputLine = it.readLine()
+//                }
+//                it.close()
+//                println("Response : $response")
+//                Log.d("bitx_log","Response : $response")
+//                return response.toString()
+//            }
+//        }
+        val url = localhost+"login"
+        val postDataParams = JSONObject()
+        postDataParams.put("userid", id)
+        postDataParams.put("password", pw)
+
+        return requestPOST(url,postDataParams)
+    }
+
+    fun requestPOST(r_url: String?, postDataParams: JSONObject): String {
+        val url = URL(r_url)
+        val conn: HttpURLConnection = url.openConnection() as HttpURLConnection
+        conn.readTimeout = 3000
+        conn.connectTimeout = 3000
+        conn.requestMethod = "POST"
+        conn.doInput = true
+        conn.doOutput = true
+        val os: OutputStream = conn.outputStream
+        val writer = BufferedWriter(OutputStreamWriter(os, "UTF-8"))
+        writer.write(encodeParams(postDataParams))
+        writer.flush()
+        writer.close()
+        os.close()
+        val responseCode: Int = conn.responseCode // To Check for 200
+        if (responseCode == HttpsURLConnection.HTTP_OK) {
+            val `in` = BufferedReader(InputStreamReader(conn.inputStream))
+            val sb = StringBuffer("")
+            var line: String? = ""
+            while (`in`.readLine().also { line = it } != null) {
+                sb.append(line)
+                break
             }
-            else if (id.substring(0, 3).equals("JSC", ignoreCase = true))
-                localhost = "http://suji-sungmin-i.net/"
-            else if (id.substring(0, 3).equals("NSC", ignoreCase = true))
-                localhost = "http://s2-sungmin-i.net/"
-            else if (id.substring(0, 3).equals("HSC", ignoreCase = true))
-                localhost = "http://hwasan-sungmin-i.net/"
-            else if (id.substring(0, 3).equals("GSC", ignoreCase = true))
-                localhost = "http://gugal-sungmin-i.net/"
-            else
-                Sungmin = false
-
-            if (Sungmin) {
-                Localhost.httpclinet = DefaultHttpClient();
-
-                var httpclient: HttpClient? = Localhost.httpclinet
-
-                val httppost = HttpPost(Localhost.localhost + "android/loginRSA.android" + "")
-                val responseHandler = BasicResponseHandler()
-                val response = httpclient!!.execute(httppost, responseHandler)
-                val publicKey = getPublicKey(response)
-
-                val encodeID = Encrypt(id, publicKey)
-                val encodePW = Encrypt(pw, publicKey)
-
-                httppost.setURI(URI(Localhost.localhost + "android/loginProc.android"))
-                val nameValuePairs = ArrayList<NameValuePair>(2)
-                nameValuePairs.add(BasicNameValuePair("id", encodeID))
-                nameValuePairs.add(BasicNameValuePair("pass", encodePW))
-                nameValuePairs.add(BasicNameValuePair("token", regId))
-                httppost.setEntity(UrlEncodedFormEntity(nameValuePairs))
-                val response2 = httpclient.execute(httppost, responseHandler)
-
-                line = response2
-            } else
-                line = "fail"
-        } catch (e: Exception) {
-            Log.d("bitx_log", "error:$e")
+            `in`.close()
+            return sb.toString()
         }
+        return ""
+    }
 
-
-        return line
+    @Throws(IOException::class)
+    private fun encodeParams(params: JSONObject): String? {
+        val result = StringBuilder()
+        var first = true
+        val itr = params.keys()
+        while (itr.hasNext()) {
+            val key = itr.next()
+            val value = params[key]
+            if (first) first = false else result.append("&")
+            result.append(URLEncoder.encode(key, "UTF-8"))
+            result.append("=")
+            result.append(URLEncoder.encode(value.toString(), "UTF-8"))
+        }
+        return result.toString()
     }
 
     fun getAllBoardList(userid: String): String {
@@ -496,4 +534,48 @@ class SendServer {
         }
         return sb.toString()
     }
+
+     fun readStream(inputStream: BufferedInputStream): String {
+        val bufferedReader = BufferedReader(InputStreamReader(inputStream))
+        val stringBuilder = StringBuilder()
+        bufferedReader.forEachLine { stringBuilder.append(it) }
+        return stringBuilder.toString()
+    }
+
+    fun sendPostRequest(userName:String, password:String) {
+
+        var reqParam = URLEncoder.encode("username", "UTF-8") + "=" + URLEncoder.encode(userName, "UTF-8")
+        reqParam += "&" + URLEncoder.encode("password", "UTF-8") + "=" + URLEncoder.encode(password, "UTF-8")
+        val mURL = URL("<Your API Link>")
+
+        with(mURL.openConnection() as HttpURLConnection) {
+            // optional default is GET
+            requestMethod = "POST"
+
+            val wr = OutputStreamWriter(getOutputStream());
+            wr.write(reqParam);
+            wr.flush();
+
+            println("URL : $url")
+            println("Response Code : $responseCode")
+
+            BufferedReader(InputStreamReader(inputStream)).use {
+                val response = StringBuffer()
+
+                var inputLine = it.readLine()
+                while (inputLine != null) {
+                    response.append(inputLine)
+                    inputLine = it.readLine()
+                }
+                it.close()
+                println("Response : $response")
+            }
+        }
+    }
+
+
+
+
 }
+
+
