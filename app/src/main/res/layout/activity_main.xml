@@ -16,12 +16,24 @@
         android:id="@+id/main_title_bar"
         android:background="#B1BCBE">
         <ImageView
+                android:id="@+id/menu_logo"
             android:layout_marginTop="5dp"
             android:layout_centerHorizontal="true"
             android:src="@drawable/navi_logo"
             android:layout_marginBottom="5dp"
             android:layout_width="150dp"
             android:layout_height="60dp"/>
+
+        <ImageView
+                android:id="@+id/menu_bt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:src="@drawable/menubutton"
+                android:layout_marginLeft="10dp"
+                android:layout_alignBottom="@+id/menu_logo"
+                android:layout_alignTop="@+id/menu_logo"
+            />
 
     </RelativeLayout>
 
@@ -126,7 +138,7 @@
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="사진"
+                    android:text="반별갤러리"
                     android:textSize="12sp"/>
 
             </LinearLayout>
@@ -166,7 +178,7 @@
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="교육기획안"
+                    android:text="교육활동안"
                     android:textSize="12sp"/>
 
             </LinearLayout>

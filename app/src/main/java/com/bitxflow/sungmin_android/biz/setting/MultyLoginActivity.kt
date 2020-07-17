@@ -17,6 +17,7 @@ import com.bitxflow.sungmin_android.biz.splash.SplashActivity
 import com.bitxflow.sungmin_android.send.SendServer
 import kotlinx.android.synthetic.main.activity_multy_login.*
 import kotlinx.android.synthetic.main.multy_login_item.*
+import org.json.JSONObject
 import java.util.ArrayList
 
 class MultyLoginActivity : AppCompatActivity() {
@@ -111,9 +112,15 @@ class MultyLoginActivity : AppCompatActivity() {
 
         override fun doInBackground(vararg params: String): String {
             val su = SendServer()
-            userId = params[0]
-            userPassword = params[1]
-            return su.Login(params[0], params[1],"")
+            userId = params[0].trim()
+            userPassword = params[1].trim()
+
+            val url = "login"
+            val postDataParams = JSONObject()
+            postDataParams.put("userid", userId.toUpperCase())
+            postDataParams.put("password", userPassword)
+
+            return su.requestPOST(url,postDataParams)
         }
 
         override fun onPostExecute(result: String) {

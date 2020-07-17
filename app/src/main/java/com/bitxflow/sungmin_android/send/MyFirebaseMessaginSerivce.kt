@@ -40,7 +40,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
      */
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         Log.d(TAG, "From: " + remoteMessage.from)
-
+        Log.d("bitx_log","FCM in")
         if(remoteMessage.notification != null) {
             Log.d(TAG, "Notification Message Body: ${remoteMessage.notification?.body}")
             sendNotification(remoteMessage.notification?.body)

@@ -1,23 +1,32 @@
 package com.bitxflow.sungmin_android.biz.photo
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.bitxflow.sungmin_android.DB.MemberDatabase
 import com.bitxflow.sungmin_android.DB.User
 import com.bitxflow.sungmin_android.R
 import com.bitxflow.sungmin_android.biz.board.BoardActivity
 import com.bitxflow.sungmin_android.send.SendServer
+import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_photo.*
 import kotlinx.android.synthetic.main.fragment_photo.view.*
+import org.json.JSONArray
 import org.json.JSONObject
+import java.io.InputStream
+import java.net.HttpURLConnection
+import java.net.URL
 import java.util.*
 
 
@@ -31,6 +40,7 @@ class PhotoFragment : Fragment() {
     var titleList: MutableList<String> = ArrayList()
     var sidList: MutableList<String> = ArrayList()
     var contentsList: MutableList<String> = ArrayList()
+    var attachmentList: MutableList<JSONArray> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +62,7 @@ class PhotoFragment : Fragment() {
                 var user: User? = userDB?.userDao()?.getMultyLoginUser(true)
                 class_name = user!!.className.toString()
 
-                getPhotoListTask().execute(user_id, class_name,"0")
+                getPhotoListTask().execute(user_id, class_name)
 
             } catch (e: Exception) {
                 Log.d("bitx_log", "error :" + e.toString())
@@ -71,9 +81,9 @@ class PhotoFragment : Fragment() {
                 page++
                 val str_page = page.toString()
                 
-                activity!!.main_progressText.text = "사진첩 로딩중"
+                activity!!.main_progressText.text = "반별갤러리 로딩중"
                 activity!!.main_progressbar.visibility = View.VISIBLE
-                getPhotoListTask().execute(user_id, class_name,str_page)
+                getPhotoListTask().execute(user_id, class_name)
             }
 
         }
@@ -88,67 +98,93 @@ class PhotoFragment : Fragment() {
 
         override fun doInBackground(vararg params: String): String {
             val su = SendServer()
-            return su.getPhotoList(params[0], params[1],params[2])
+
+            val userId = params[0]
+            val classname = params[1]
+            val url = "photo"
+            val postDataParams = JSONObject()
+            postDataParams.put("userid", userId.toUpperCase())
+            postDataParams.put("classname", classname)
+
+            return su.requestPOST(url,postDataParams)
         }
 
         override fun onPostExecute(result: String) {
-            Log.d("bitx_log", "photolist result :$result")
+//            Log.d("bitx_log", "photolist result :$result")
 
-            activity!!.main_progressText.text = ""
-            activity!!.main_progressbar.visibility = View.GONE
+            if(result == "")
+                Toast.makeText(activity,"다시 시도해 주세요", Toast.LENGTH_SHORT).show()
 
-            val `object` = JSONObject(result)
-            val count: Int = `object`.getInt("count")
-            val photos = `object`.getJSONArray("list")
+            else {
+                try {
+                    activity!!.main_progressText.text = ""
+                    activity!!.main_progressbar.visibility = View.GONE
 
-            for(i in 0 until count)
-            {
-                val json = photos.getJSONObject(i)
-                val photo = Photo(
-                    json.getString("board_sid"),
-                    json.getString("title"),
-                    json.getString("contents"),
-                    json.getString("pUrl")
-                )
-                titleList!!.add(json.getString("title"))
-                sidList!!.add(json.getString("board_sid"))
-                contentsList!!.add(json.getString("contents"))
-                photoList.add(photo)
-            }
 
-            val photoAdapter = PhotoListAdapter(context!!,photoList)
-            photoAdapter.notifyDataSetChanged()
-            photo_lv.adapter = photoAdapter
+                    val `object` = JSONObject(result)
+                    val count: Int = `object`.getInt("photoCount")
+                    val photos = `object`.getJSONArray("photoList")
 
-            val footer: View =
-            layoutInflater.inflate(R.layout.photo_list_footer, null, false)
+                    for (i in 0 until count) {
+                        val json = photos.getJSONObject(i)
+                        val t_imgarr = json.getJSONArray("attachment")
+                        val t_json = t_imgarr.getJSONObject(0)
+                        val pUrl =
+                            "https://d1d2thkw8tiq2x.cloudfront.net/" + t_json.getString("path")
+                        val photo = Photo(
+                            json.getString("photoID"),
+                            json.getString("title"),
+                            json.getString("contents"),
+                            pUrl
+                        )
+                        titleList!!.add(json.getString("title"))
+                        sidList!!.add(json.getString("photoID"))
+                        contentsList!!.add(json.getString("contents"))
+                        attachmentList!!.add(t_imgarr)
+                        photoList.add(photo)
+                    }
 
-            if(page==0)
-                photo_lv.addFooterView(footer)
+                    val photoAdapter = PhotoListAdapter(context!!, photoList)
+                    photoAdapter.notifyDataSetChanged()
+                    photo_lv.adapter = photoAdapter
 
-            photo_lv.setOnItemClickListener { parent, view, position, id ->
-                    val nextIntent = Intent(context, BoardActivity::class.java)
-                    nextIntent.putExtra("user_id", user_id)
-                    nextIntent.putExtra("board_sid", sidList[position])
-                    nextIntent.putExtra("contents", contentsList[position])
-                    nextIntent.putExtra("title", titleList[position])
-                    startActivity(nextIntent)
+                    val footer: View =
+                        layoutInflater.inflate(R.layout.photo_list_footer, null, false)
+
+                    if (page == 0)
+                        photo_lv.addFooterView(footer)
+
+                    photo_lv.setOnItemClickListener { parent, view, position, id ->
+                        val nextIntent = Intent(context, BoardActivity::class.java)
+                        nextIntent.putExtra("type", "photo")
+                        nextIntent.putExtra("user_id", user_id)
+                        nextIntent.putExtra("board_sid", sidList[position])
+                        nextIntent.putExtra("contents", contentsList[position])
+                        nextIntent.putExtra("attachmentList", attachmentList[position].toString())
+                        nextIntent.putExtra("title", titleList[position])
+                        startActivity(nextIntent)
+                    }
+
+                    if (page > 0)
+                        photo_lv.setSelection(page * 10);
+                }catch (e: Exception)
+                {
                 }
-
-            if(page>0)
-                photo_lv.setSelection(page*10);
-
+            }
 //
-
-            activity!!.nav_home_ll.isClickable = true
-            activity!!.nav_photo_ll.isClickable = true
-            activity!!.nav_letter_ll.isClickable = true
-            activity!!.nav_plan_ll.isClickable = true
-            activity!!.nav_all_board_ll.isClickable = true
-            activity!!.nav_board_ll.isClickable = true
-            activity!!.nav_setting_ll.isClickable = true
-            activity!!.nav_calendar_ll.isClickable = true
+            if(isAdded) {
+                activity!!.nav_home_ll.isClickable = true
+                activity!!.nav_photo_ll.isClickable = true
+                activity!!.nav_letter_ll.isClickable = true
+                activity!!.nav_plan_ll.isClickable = true
+                activity!!.nav_all_board_ll.isClickable = true
+                activity!!.nav_board_ll.isClickable = true
+                activity!!.nav_setting_ll.isClickable = true
+                activity!!.nav_calendar_ll.isClickable = true
+            }
         }
     }
+
+
 
 }

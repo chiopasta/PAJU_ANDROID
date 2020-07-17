@@ -181,8 +181,8 @@
             android:paddingRight="10dp"
             android:layout_below="@+id/meal_menu_tx"
             android:id="@+id/meal_iv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
             android:layout_centerHorizontal="true" />
     </RelativeLayout>
 

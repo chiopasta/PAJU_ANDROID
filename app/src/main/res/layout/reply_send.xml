@@ -8,12 +8,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-        <CheckBox
-            android:id="@+id/secret_checkbox"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:text="비밀글" />
+<!--        <CheckBox-->
+<!--            android:id="@+id/secret_checkbox"-->
+<!--            android:layout_width="100dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignParentRight="true"-->
+<!--            android:text="비밀글" />-->
 
         <TextView
             android:id="@+id/photo_reply_send_name"

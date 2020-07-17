@@ -24,6 +24,7 @@ class DownloadImage(val bmImage: ImageView): AsyncTask<String, Void, Bitmap>()
     }
 
     override fun onPostExecute(result: Bitmap?) {
+        Log.d("bitx_log","result $result")
         bmImage!!.setImageBitmap(result)
     }
 }

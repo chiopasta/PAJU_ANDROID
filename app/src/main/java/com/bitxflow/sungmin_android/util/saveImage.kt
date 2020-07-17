@@ -26,6 +26,7 @@ fun saveDrawable(
         return 0
     }
     if (bitmap == null) return 0
+    Log.d("bitx_log","bitmap : $bitmap")
     val canvas = Canvas(bitmap)
     drawable.draw(canvas)
     var fOut: OutputStream? = null
@@ -36,6 +37,7 @@ fun saveDrawable(
         val cachePath =
             File(root.absolutePath + "/Pictures/Sungmin/" + imagePath + ".jpg")
         try {
+            Log.d("bitx_log", "out file $imagePath")
             fOut = FileOutputStream(cachePath)
             bitmap.compress(Bitmap.CompressFormat.JPEG, 95, fOut)
             fOut.flush()
@@ -44,14 +46,14 @@ fun saveDrawable(
             val contentUri = Uri.fromFile(cachePath)
             mediaScanIntent.data = contentUri
             context.sendBroadcast(mediaScanIntent)
-            context.sendBroadcast(
-                Intent(
-                    Intent.ACTION_MEDIA_MOUNTED,
-                    Uri.parse("file://" + Environment.getExternalStorageDirectory() + "/Pictures/Sungmin")
-                )
-            )
+//            context.sendBroadcast(
+//                Intent(
+//                    Intent.ACTION_MEDIA_MOUNTED,
+//                    Uri.parse("file://" + Environment.getExternalStorageDirectory() + "/Pictures/Sungmin")
+//                )
+//            )
         } catch (e: Exception) {
-            Log.d("bitx", "error :$e")
+            Log.d("bitx_log", "error :$e")
         }
         result = 1
     } finally {

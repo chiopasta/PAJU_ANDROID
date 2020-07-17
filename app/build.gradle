@@ -14,8 +14,8 @@ android {
         applicationId "com.bitxflow.sungmin_android"
         minSdkVersion 17
         targetSdkVersion 28
-        versionCode 102
-        versionName "1.02"
+        versionCode 112
+        versionName "1.12"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -24,7 +24,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    useLibrary 'org.apache.http.legacy'
 }
 
 dependencies {
@@ -51,8 +50,8 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:3.4.2'
     implementation 'com.github.MikeOrtiz:TouchImageView:2.3.2' // Android X
 
-    implementation 'com.google.firebase:firebase-analytics:17.2.0'
-    implementation 'com.google.firebase:firebase-messaging:20.0.0'
+    implementation 'com.google.firebase:firebase-analytics:17.4.3'
+    implementation 'com.google.firebase:firebase-messaging:20.2.1'
 
     implementation group: 'com.koushikdutta.urlimageviewhelper', name: 'urlimageviewhelper', version: '1.0.4'
     implementation 'com.github.omadahealth:swipy:1.2.3@aar'
@@ -60,4 +59,9 @@ dependencies {
     implementation 'com.prolificinteractive:material-calendarview:1.4.3'
 
     implementation 'com.android.volley:volley:1.1.1'
+
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
 }

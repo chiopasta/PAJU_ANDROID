@@ -3,16 +3,6 @@ package com.bitxflow.sungmin_android.send
 import android.annotation.SuppressLint
 import android.util.Base64
 import android.util.Log
-import org.apache.http.HttpResponse
-import org.apache.http.NameValuePair
-import org.apache.http.client.HttpClient
-import org.apache.http.client.entity.UrlEncodedFormEntity
-import org.apache.http.client.methods.HttpGet
-import org.apache.http.client.methods.HttpPost
-import org.apache.http.impl.client.BasicResponseHandler
-import org.apache.http.message.BasicNameValuePair
-import org.apache.http.protocol.HTTP
-import org.apache.http.util.EntityUtils
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.*
@@ -46,10 +36,9 @@ class SendServer {
 
     companion object Localhost {
         var localhost: String = ""
-        var httpclinet: HttpClient? = null
     }
 
-    private val localhost = "http://m.bitxdev.com/"
+    private val localhost = "https://m.sungmin-i.com/"
     private val web_localhost = "http://sungmin-i.com/"
 
 //    private val httpclient: HttpClient= DefaultHttpClient()
@@ -57,68 +46,49 @@ class SendServer {
     @Suppress("DEPRECATION")
     fun Login(id: String, pw: String, regId: String): String {
 
-//        var reqParam = URLEncoder.encode("userid", "UTF-8") + "=" + URLEncoder.encode(id, "UTF-8")
-//        reqParam += "&" + URLEncoder.encode("password", "UTF-8") + "=" + URLEncoder.encode(pw, "UTF-8")
-//        val mURL = URL(localhost+"login")
-//
-//        with(mURL.openConnection() as HttpURLConnection) {
-//            // optional default is GET
-//            requestMethod = "POST"
-//
-//            val wr = OutputStreamWriter(getOutputStream());
-//            wr.write(reqParam);
-//            wr.flush();
-//
-//            println("URL : $url")
-//            println("Response Code : $responseCode")
-//
-//            BufferedReader(InputStreamReader(inputStream)).use {
-//                val response = StringBuffer()
-//
-//                var inputLine = it.readLine()
-//                while (inputLine != null) {
-//                    response.append(inputLine)
-//                    inputLine = it.readLine()
-//                }
-//                it.close()
-//                println("Response : $response")
-//                Log.d("bitx_log","Response : $response")
-//                return response.toString()
-//            }
-//        }
         val url = localhost+"login"
         val postDataParams = JSONObject()
-        postDataParams.put("userid", id)
+        postDataParams.put("userid", id.toUpperCase())
         postDataParams.put("password", pw)
 
         return requestPOST(url,postDataParams)
     }
 
-    fun requestPOST(r_url: String?, postDataParams: JSONObject): String {
-        val url = URL(r_url)
+    fun requestPOST(_url: String?, postDataParams: JSONObject): String {
+        val url = URL(localhost + _url)
         val conn: HttpURLConnection = url.openConnection() as HttpURLConnection
         conn.readTimeout = 3000
         conn.connectTimeout = 3000
         conn.requestMethod = "POST"
+        conn.setRequestProperty("Accept","application/json")
         conn.doInput = true
         conn.doOutput = true
-        val os: OutputStream = conn.outputStream
-        val writer = BufferedWriter(OutputStreamWriter(os, "UTF-8"))
-        writer.write(encodeParams(postDataParams))
-        writer.flush()
-        writer.close()
-        os.close()
-        val responseCode: Int = conn.responseCode // To Check for 200
-        if (responseCode == HttpsURLConnection.HTTP_OK) {
-            val `in` = BufferedReader(InputStreamReader(conn.inputStream))
-            val sb = StringBuffer("")
-            var line: String? = ""
-            while (`in`.readLine().also { line = it } != null) {
-                sb.append(line)
-                break
+        try {
+            val os: OutputStream = conn.outputStream
+            val writer = BufferedWriter(OutputStreamWriter(os, "UTF-8"))
+            writer.write(encodeParams(postDataParams))
+            writer.flush()
+            writer.close()
+            os.close()
+            val responseCode: Int = conn.responseCode // To Check for 200
+            if (responseCode == HttpsURLConnection.HTTP_OK) {
+                return conn.inputStream.bufferedReader().readText()
+//            val `in` = BufferedReader(InputStreamReader(conn.inputStream))
+//            Log.d("bitx_log","`data`:"+ data)
+//            val sb = StringBuffer("")
+//            var line: String? = ""
+//            while (`in`.readLine().also { line = it } != null) {
+//
+//                sb.append(line)
+//                break
+//            }
+//            `in`.close()
+//            Log.d("bitx_log","sb:"+sb.toString())
+//            return sb.toString()
             }
-            `in`.close()
-            return sb.toString()
+        }catch(e: Exception)
+        {
+            return ""
         }
         return ""
     }
@@ -139,18 +109,16 @@ class SendServer {
         return result.toString()
     }
 
+    fun requestGET(_url: String?): String {
+        val url = URL(localhost + _url)
+        val conn: HttpURLConnection = url.openConnection() as HttpURLConnection
+        return conn.inputStream.bufferedReader().readText()
+    }
+
     fun getAllBoardList(userid: String): String {
         var line = "fail"
         try {
-            val httppost = HttpPost(web_localhost + "android/get_all_board.android")
-            val responseHandler = BasicResponseHandler()
-            val nameValuePairs = ArrayList<NameValuePair>(1)
-            nameValuePairs.add(BasicNameValuePair("userid", userid))
-            httppost.setEntity(UrlEncodedFormEntity(nameValuePairs))
-            val response = Localhost.httpclinet!!.execute(httppost)
-            val responseString = EntityUtils.toString(response.getEntity(), "UTF_8")
 
-            line = responseString
 
         } catch (e: Exception) {
             Log.d("bitx_log", "error:$e")
@@ -163,16 +131,7 @@ class SendServer {
     fun getBoardList(userid: String,classname : String): String {
         var line = "fail"
         try {
-            val httppost = HttpPost(web_localhost + "android/get_my_board.android")
-            val responseHandler = BasicResponseHandler()
-            val nameValuePairs = ArrayList<NameValuePair>(2)
-            nameValuePairs.add(BasicNameValuePair("userid", userid))
-            nameValuePairs.add(BasicNameValuePair("classname",URLEncoder.encode(classname, "UTF-8")))
-            httppost.setEntity(UrlEncodedFormEntity(nameValuePairs))
-            val response = Localhost.httpclinet!!.execute(httppost)
-            val responseString = EntityUtils.toString(response.getEntity(), "UTF_8")
 
-            line = responseString
 
         } catch (e: Exception) {
             Log.d("bitx_log", "error:$e")
@@ -185,16 +144,6 @@ class SendServer {
     fun getCalendar(year: String,month : String): String {
         var line = "fail"
         try {
-            val httppost = HttpPost(Localhost.localhost + "android/getEventPlan.do")
-            val responseHandler = BasicResponseHandler()
-            val nameValuePairs = ArrayList<NameValuePair>(2)
-            nameValuePairs.add(BasicNameValuePair("year", year))
-            nameValuePairs.add(BasicNameValuePair("month",month))
-            httppost.setEntity(UrlEncodedFormEntity(nameValuePairs))
-            val response = Localhost.httpclinet!!.execute(httppost)
-            val responseString = EntityUtils.toString(response.getEntity(), "UTF_8")
-
-            line = responseString
 
         } catch (e: Exception) {
             Log.d("bitx_log", "error:$e")
@@ -207,15 +156,6 @@ class SendServer {
     fun SendAttend(attendstatus: String,reason : String): String {
         var line = "fail"
         try {
-            val httppost = HttpPost(Localhost.localhost + "android/attendupdate.do")
-            val responseHandler = BasicResponseHandler()
-            val nameValuePairs = ArrayList<NameValuePair>(2)
-            nameValuePairs.add(BasicNameValuePair("attendstatus", attendstatus))
-            nameValuePairs.add(BasicNameValuePair("reason",reason))
-            httppost.setEntity(UrlEncodedFormEntity(nameValuePairs))
-            val response = Localhost.httpclinet!!.execute(httppost)
-            val responseString = EntityUtils.toString(response.getEntity(), "UTF_8")
-            line = responseString
 
         } catch (e: Exception) {
             Log.d("bitx_log", "error:$e")
@@ -229,16 +169,6 @@ class SendServer {
     fun getPhotoList(userid : String,classname : String , page : String): String {
         var line = "fail"
         try {
-            val httppost = HttpPost(web_localhost + "android/newphotolist.mobile")
-            val nameValuePairs = ArrayList<NameValuePair>(2)
-            nameValuePairs.add(BasicNameValuePair("userid", userid))
-            nameValuePairs.add(BasicNameValuePair("classname",classname))
-            nameValuePairs.add(BasicNameValuePair("page", page))
-            httppost.setEntity(UrlEncodedFormEntity(nameValuePairs,HTTP.UTF_8))
-            val response = Localhost.httpclinet!!.execute(httppost)
-            val responseString = EntityUtils.toString(response.getEntity(), "UTF_8")
-
-            line = responseString
 
         } catch (e: Exception) {
             Log.d("bitx_log", "error:$e")
@@ -252,20 +182,7 @@ class SendServer {
                   ,replySecretYN : String ,replyContent: String): String {
         var line = "fail"
         try {
-            val httppost = HttpPost(web_localhost + "mobile/reply_write.android")
-            val responseHandler = BasicResponseHandler()
-            val nameValuePairs = ArrayList<NameValuePair>(5)
-            nameValuePairs.add(BasicNameValuePair("boardSid", boardSid))
-            nameValuePairs.add(BasicNameValuePair("userId", userId))
-            nameValuePairs.add(BasicNameValuePair("replyWriter", userName))
-            nameValuePairs.add(BasicNameValuePair("replySecretYN", replySecretYN))
-            nameValuePairs.add(BasicNameValuePair("replyContent", replyContent))
-            httppost.entity = UrlEncodedFormEntity(nameValuePairs, HTTP.UTF_8)
-//            httppost.setEntity(UrlEncodedFormEntity(nameValuePairs))
-            val response = Localhost.httpclinet!!.execute(httppost)
-            val responseString = EntityUtils.toString(response.getEntity(), "UTF_8")
 
-            line = responseString
 
         } catch (e: Exception) {
             Log.d("bitx_log", "error:$e")
@@ -275,20 +192,10 @@ class SendServer {
     }
 
     @Suppress("DEPRECATION")
-    fun getPhotoDetail(userid: String,boardSid : String): String {
+    fun getPhotoDetail(photoID: String): String {
         var line = "fail"
         try {
-            val httppost = HttpPost(web_localhost + "android/newphotodetail.android")
-            val responseHandler = BasicResponseHandler()
-            val nameValuePairs = ArrayList<NameValuePair>(2)
-            nameValuePairs.add(BasicNameValuePair("userid", userid))
-            nameValuePairs.add(BasicNameValuePair("boardSid", boardSid))
-            httppost.setEntity(UrlEncodedFormEntity(nameValuePairs))
-            val response = Localhost.httpclinet!!.execute(httppost)
-            val responseString = EntityUtils.toString(response.getEntity(), "UTF_8")
-
-            line = responseString
-
+            line = getStringFromUrl(localhost + "photo/comment/"+photoID)
         } catch (e: Exception) {
             Log.d("bitx_log", "error:$e")
         }
@@ -307,7 +214,6 @@ class SendServer {
             )
         } catch (e: Exception) {
             e.printStackTrace()
-            Log.d("bitx_log", "error getUser:" + e.toString())
         }
 
         return line
@@ -318,14 +224,9 @@ class SendServer {
         var line = "fail"
 
         try {
-            val httppost = HttpPost(Localhost.localhost + "android/mealinfo.do")
-            val responseHandler = BasicResponseHandler()
-            val response = Localhost.httpclinet!!.execute(httppost, responseHandler)
-            line = response.toString()
 
         } catch (e: Exception) {
             e.printStackTrace()
-            Log.d("bitx_log", "error getUser:" + e.toString())
         }
 
         return line
@@ -335,12 +236,6 @@ class SendServer {
     fun getMobilePush(): String {
         var line = "fail"
         try {
-            val httppost = HttpPost(Localhost.localhost + "android/getNotice.do")
-
-            val response: HttpResponse = Localhost.httpclinet!!.execute(httppost)
-            val responseString = EntityUtils.toString(response.getEntity(), "UTF_8")
-
-            line = responseString
 
         } catch (e: Exception) {
             e.printStackTrace()
@@ -353,12 +248,7 @@ class SendServer {
     fun getHomeLetterList(): String {
         var line = "fail"
         try {
-            val httppost = HttpPost(Localhost.localhost + "android/getHomeLetterList.do")
 
-            val response: HttpResponse = Localhost.httpclinet!!.execute(httppost)
-            val responseString = EntityUtils.toString(response.getEntity(), "UTF_8")
-
-            line = responseString
 
         } catch (e: Exception) {
             e.printStackTrace()
@@ -388,20 +278,6 @@ class SendServer {
         var line = "fail"
 
         try {
-            val httppost = HttpPost(Localhost.localhost + "android/infoupdate.do")
-            val responseHandler = BasicResponseHandler()
-
-            Log.d("bitx_log","np : $np na : $na \n ph : $ph")
-            val nameValuePairs = ArrayList<NameValuePair>(3)
-            nameValuePairs.add(BasicNameValuePair("np", np))
-            nameValuePairs.add(BasicNameValuePair("na",URLEncoder.encode(na, "UTF-8")))
-            nameValuePairs.add(BasicNameValuePair("ph", ph))
-            httppost.setEntity(UrlEncodedFormEntity(nameValuePairs))
-
-            val response = Localhost.httpclinet!!.execute(httppost)
-            val responseString = EntityUtils.toString(response.getEntity(), "UTF_8")
-
-            line = responseString
 
 //            val response = Localhost.httpclinet!!.execute(httppost, responseHandler)
 //            line = response.toString()
@@ -491,10 +367,6 @@ class SendServer {
         var contentStream: InputStream? = null
         try {
 
-            var httpclient: HttpClient? = Localhost.httpclinet
-
-            val response = httpclient!!.execute(HttpGet(url))
-            contentStream = response.entity.content
         } catch (e: Exception) {
             e.printStackTrace()
             Log.d("bitx_log", "getinputstream error:" + e.toString())

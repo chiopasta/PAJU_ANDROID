@@ -4,12 +4,15 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.AssetManager
 import android.graphics.Color
 import android.graphics.PorterDuff
+import android.net.Uri
 import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +22,18 @@ import com.bitxflow.sungmin_android.R
 import com.bitxflow.sungmin_android.biz.login.LoginActivity
 import com.bitxflow.sungmin_android.send.SendServer
 import kotlinx.android.synthetic.main.activity_splash.*
+import org.json.JSONObject
+import java.io.*
+import java.lang.Exception
+import java.net.HttpURLConnection
+import java.net.URL
+import java.net.URLEncoder
+import java.security.KeyStore
+import java.security.cert.CertificateFactory
+import java.security.cert.X509Certificate
+import javax.net.ssl.HttpsURLConnection
+import javax.net.ssl.SSLContext
+import javax.net.ssl.TrustManagerFactory
 
 
 class SplashActivity : AppCompatActivity() {
@@ -37,7 +52,6 @@ class SplashActivity : AppCompatActivity() {
         var users : List<User>? = null
         checkPermission()
         pbar = splash_progressBar
-
         pbar!!.progressDrawable
             .setColorFilter(Color.RED, PorterDuff.Mode.MULTIPLY)
         pbar!!.progress = myProgress
@@ -48,35 +62,38 @@ class SplashActivity : AppCompatActivity() {
 
             users = userDB?.userDao()?.getUsers()
 
-            if(users!!.isNotEmpty())
-            {
-                val user : User? = userDB?.userDao()?.getMultyLoginUser(true)
+            try {
 
-                val userId = user!!.userId
-                val userpw = user!!.userPassword
+//                for(i in users!!)
+//                {
+//                    Log.d("bitx_log","users?" + i.userId)
+//                    Log.d("bitx_log","users?" + i.userName)
+//                    Log.d("bitx_log","users?" + i.imgSrc)
+//                    Log.d("bitx_log","users?" + i.classSid)
+//                    Log.d("bitx_log","users?" + i.className)
+//                    Log.d("bitx_log","users?" + i.multy_login)
+//                }
 
-                pbar!!.progress = ++myProgress
-                Thread.sleep(1000)
-                SendTask().execute(userId,userpw)
-
-            }
-            else
+                if (users!!.isNotEmpty()) {
+                    val user: User? = userDB?.userDao()?.getMultyLoginUser(true)
+                    val userId = user!!.userId
+                    val userpw = user!!.userPassword
+                    pbar!!.progress = ++myProgress
+                    Thread.sleep(1000)
+                    SendTask().execute(userId, userpw)
+                } else {
+                    val nextIntent = Intent(this, LoginActivity::class.java)
+                    startActivityForResult(nextIntent, LOGIN_ACTIVITY)
+                }
+            }catch(e: Exception)
             {
                 val nextIntent = Intent(this, LoginActivity::class.java)
-                startActivityForResult(nextIntent,LOGIN_ACTIVITY)
+                startActivityForResult(nextIntent, LOGIN_ACTIVITY)
             }
         }
-
-
-
         val thread = Thread(getUserRunable)
         thread.start()
-
-
-
     }
-
-
 
     internal inner class SendTask : AsyncTask<String, String, String>() {
         var userId : String =""
@@ -86,24 +103,38 @@ class SplashActivity : AppCompatActivity() {
             val su = SendServer()
             userId = params[0]
             userPassword = params[1]
-            return su.Login(params[0], params[1],"")
+            val url = "login"
+            val postDataParams = JSONObject()
+            postDataParams.put("userid", userId.toUpperCase())
+            postDataParams.put("password", userPassword)
+
+            return su.requestPOST(url,postDataParams)
+//            return su.getHome(userId)
         }
 
         override fun onPostExecute(result: String) {
-//            pbar.setVisibility(View.INVISIBLE)
-//            Login_button.setClickable(true)
+            Log.d("bitx_log","Login result : $result")
 
-            if (result == "fail") {
-                Toast.makeText(baseContext, "자동로그인 실패", Toast.LENGTH_SHORT).show()
+            if(result=="") {
+                Toast.makeText(baseContext, "서버 통신오류", Toast.LENGTH_SHORT).show()
                 val nextIntent = Intent(baseContext, LoginActivity::class.java)
                 pbar!!.progress = 100
-                startActivityForResult(nextIntent,LOGIN_ACTIVITY)
-
-            } else {
-                Toast.makeText(baseContext, "자동로그인 되었습니다", Toast.LENGTH_SHORT).show()
-                pbar!!.progress = 100
-                setResult(Activity.RESULT_OK, Intent().putExtra("BackPress", userId))
-                finish()
+                startActivityForResult(nextIntent, LOGIN_ACTIVITY)
+            }
+            else {
+                val `object` = JSONObject(result)
+                val success = `object`.getBoolean("success")
+                if (success) {
+                    Toast.makeText(baseContext, "자동로그인 되었습니다", Toast.LENGTH_SHORT).show()
+                    pbar!!.progress = 100
+                    setResult(Activity.RESULT_OK, Intent().putExtra("BackPress", userId))
+                    finish()
+                } else {
+                    Toast.makeText(baseContext, "자동로그인 실패", Toast.LENGTH_SHORT).show()
+                    val nextIntent = Intent(baseContext, LoginActivity::class.java)
+                    pbar!!.progress = 100
+                    startActivityForResult(nextIntent, LOGIN_ACTIVITY)
+                }
             }
 
         }

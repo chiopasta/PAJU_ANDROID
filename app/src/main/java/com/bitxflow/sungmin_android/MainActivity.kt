@@ -86,6 +86,22 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        menu_bt.setOnClickListener {
+            if (close_menu) {
+                val ori_height = bottom_nav_rl.layoutParams.height
+                bottom_nav_rl.layoutParams.height = ori_height * 2
+                bottom_nav_rl.invalidate()
+                bottom_nav_rl.requestLayout()
+                close_menu = false
+            } else {
+                val ori_height = bottom_nav_rl.layoutParams.height
+                bottom_nav_rl.layoutParams.height = ori_height / 2
+                bottom_nav_rl.invalidate()
+                bottom_nav_rl.requestLayout()
+                close_menu = true
+            }
+        }
+
         nav_home_ll.setOnClickListener(View.OnClickListener {
             if (mCurrentFragmentIndex != HOME) {
                 menu_click(false)
@@ -151,7 +167,7 @@ class MainActivity : AppCompatActivity() {
         })
 
         FirebaseInstanceId.getInstance().instanceId
-            .addOnCompleteListener(OnCompleteListener { task ->
+                .addOnCompleteListener(OnCompleteListener { task ->
                 if (!task.isSuccessful) {
                     return@OnCompleteListener
                 }
@@ -178,6 +194,7 @@ class MainActivity : AppCompatActivity() {
         var newFragment: Fragment? = null
         val bundle = Bundle()
         var userDBcount = -1
+        var className = "";
         val testRunnable = Runnable {
 
             userDB = MemberDatabase.getInstance(baseContext)
@@ -185,7 +202,11 @@ class MainActivity : AppCompatActivity() {
             val user = userDB?.userDao()?.getMultyLoginUser(true)
             userDBcount = userDB?.userDao()?.getUsers()!!.size
             user_id = user!!.userId.toString()
+            className = user!!.className.toString()
+            val imgSrc = user!!.imgSrc.toString()
             bundle.putString("user_id", user_id)
+            bundle.putString("className", className)
+            bundle.putString("imgSrc", imgSrc)
         }
 
         val thread = Thread(testRunnable)
@@ -194,6 +215,7 @@ class MainActivity : AppCompatActivity() {
         if(userDBcount <= 0)
         {
             bundle.putString("user_id", user_id)
+            bundle.putString("className", className)
         }
 
         when (idx) {

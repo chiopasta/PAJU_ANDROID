@@ -30,6 +30,9 @@ class AccountActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_account)
 
+        val intent = intent
+        val user_id = intent.extras.getString("user_id")
+
         pw_bt.setOnClickListener {
             val builder = AlertDialog.Builder(this)
             val dialogView = layoutInflater.inflate(R.layout.account_dialog,null)
@@ -55,7 +58,7 @@ class AccountActivity : AppCompatActivity() {
                         if(pw_et1.length < 8) Toast.makeText(applicationContext,"비밀번호가 너무 짧습니다",Toast.LENGTH_SHORT).show()
                         else
                         {
-                            infoUpdateTask().execute(pw_et1.toString(),"","")
+                            infoUpdateTask().execute(user_id,pw_et1.toString(),"","")
                         }
                     }
                 }
@@ -82,7 +85,7 @@ class AccountActivity : AppCompatActivity() {
                     else {
                         if(new_phone.length < 8) Toast.makeText(applicationContext,"전화번호가 너무 짧습니다",Toast.LENGTH_SHORT).show()
                         else
-                            infoUpdateTask().execute("", "", new_phone.toString())
+                            infoUpdateTask().execute(user_id,"", "", new_phone.toString())
                     }
                 }
                 .setNegativeButton("취소"){dialogInterface, i ->
@@ -108,7 +111,7 @@ class AccountActivity : AppCompatActivity() {
                     if(new_address.toString().equals(""))
                         Toast.makeText(applicationContext,"주소를 입력해주세요",Toast.LENGTH_SHORT).show()
                     else
-                        infoUpdateTask().execute("",new_address.toString(),"")
+                        infoUpdateTask().execute(user_id,"",new_address.toString(),"")
                 }
                 .setNegativeButton("취소"){dialogInterface, i ->
 
@@ -171,20 +174,45 @@ class AccountActivity : AppCompatActivity() {
 
         override fun doInBackground(vararg params: String): String {
             val su = SendServer()
-            return su.infoUpdate(params[0],params[1],params[2])
+
+            val userId = params[0]
+            val new_password = params[1]
+            val new_address = params[2]
+            val new_phone = params[3]
+
+            var updateInfo = JSONObject()
+            if(new_password!="")
+                updateInfo.put("password",new_password)
+            if(new_address!="")
+                updateInfo.put("address",new_address)
+            if(new_phone!="")
+                updateInfo.put("emergencyNumber",new_phone)
+
+            val url = "setting"
+            Log.d("bitx_log","updateInfo $updateInfo")
+            val postDataParams = JSONObject()
+            postDataParams.put("userid", userId.toUpperCase())
+            postDataParams.put("updateInfo", updateInfo.toString())
+            return su.requestPOST(url,postDataParams)
         }
 
         override fun onPostExecute(result: String) {
 
-            val `object` = JSONObject(result)
-
-            val success  = `object`.getString("success")
-
-            if(success.equals("1"))
-                Toast.makeText(applicationContext,"수정되었습니다",Toast.LENGTH_SHORT).show()
-            else
-                Toast.makeText(applicationContext,"다시 시도해주세요",Toast.LENGTH_SHORT).show()
-
+            if(result.equals(""))
+                Toast.makeText(this@AccountActivity,"다시 시도해 주세요", Toast.LENGTH_SHORT).show()
+            else {
+                try {
+                    val `object` = JSONObject(result)
+                    val success = `object`.getBoolean("success")
+                    if (success)
+                        Toast.makeText(applicationContext, "수정되었습니다", Toast.LENGTH_SHORT).show()
+                    else
+                        Toast.makeText(applicationContext, "다시 시도해주세요", Toast.LENGTH_SHORT).show()
+                }catch(e : Exception)
+                {
+                    Toast.makeText(this@AccountActivity,"다시 시도해 주세요", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 

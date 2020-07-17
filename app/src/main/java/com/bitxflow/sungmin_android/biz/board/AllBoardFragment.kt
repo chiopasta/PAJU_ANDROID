@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.bitxflow.sungmin_android.DB.MemberDatabase
 import com.bitxflow.sungmin_android.DB.User
@@ -47,7 +48,7 @@ class AllBoardFragment : Fragment() {
         val startRunnable = Runnable {
 
             try {
-                getAllBoardList().execute()
+                getAllBoardList().execute(user_id)
             } catch (e: Exception) {
                 Log.d("bitx_log", "error :" + e.toString())
             }
@@ -64,64 +65,79 @@ class AllBoardFragment : Fragment() {
 
         override fun doInBackground(vararg params: String): String {
             val su = SendServer()
-            return su.getAllBoardList(user_id)
+
+            val userId = params[0]
+            val url = "board"
+            val postDataParams = JSONObject()
+            postDataParams.put("userid", userId.toUpperCase())
+
+            return su.requestPOST(url,postDataParams)
         }
 
         override fun onPostExecute(result: String) {
 //            Log.d("bitx_log", "homeletter result :$result")
 
-            activity!!.main_progressText.text =""
-            activity!!.main_progressbar.visibility = View.GONE
-            try {
-                val `object` = JSONObject(result)
-                val count: Int = `object`.getInt("count")
-                val homeLetterList = `object`.getJSONArray("list")
+            if(result.equals(""))
+                Toast.makeText(activity,"다시 시도해 주세요", Toast.LENGTH_SHORT).show()
 
-                var noticeList: MutableList<String> = ArrayList()
-                var titleList: MutableList<String> = ArrayList()
-                var sidList: MutableList<String> = ArrayList()
-                var contentsList: MutableList<String> = ArrayList()
+            else {
+                try {
+                activity!!.main_progressText.text = ""
+                activity!!.main_progressbar.visibility = View.GONE
 
-                for (i in 0 until count) {
-                    val json = homeLetterList.getJSONObject(i)
-                    noticeList.add(json.getString("date") + "\n" + json.getString("title"))
-                    titleList!!.add(json.getString("title"))
-                    sidList!!.add(json.getString("board_sid"))
-                    contentsList!!.add(json.getString("contents"))
+                    val `object` = JSONObject(result)
+                    val count: Int = `object`.getInt("boardCount")
+                    val homeLetterList = `object`.getJSONArray("boardList")
+
+                    var titleList: MutableList<String> = ArrayList()
+                    var sidList: MutableList<String> = ArrayList()
+                    var contentsList: MutableList<String> = ArrayList()
+                    var attachmentList: MutableList<String> = ArrayList()
+
+                    for (i in 0 until count) {
+                        val json = homeLetterList.getJSONObject(i)
+                        val t_imgarr = json.getJSONArray("attachment")
+                        titleList!!.add(json.getString("title"))
+                        sidList!!.add(json.getString("boardID"))
+                        contentsList!!.add(json.getString("contents"))
+                        attachmentList!!.add(t_imgarr.toString())
+                    }
+
+                    adapter = ArrayAdapter(
+                        activity,
+                        android.R.layout.simple_list_item_1,
+                        titleList
+                    )
+
+                    fragment_board_listview.adapter = adapter
+
+                    fragment_board_listview.setOnItemClickListener { parent, view, position, id ->
+                        val nextIntent = Intent(context, BoardActivity::class.java)
+                        nextIntent.putExtra("type", "board")
+                        nextIntent.putExtra("user_id", user_id)
+                        nextIntent.putExtra("board_sid", sidList[position])
+                        nextIntent.putExtra("contents", contentsList[position])
+                        nextIntent.putExtra("attachmentList", attachmentList[position])
+                        nextIntent.putExtra("title", titleList[position])
+                        startActivity(nextIntent)
+                    }
+
+                    val footer: View =
+                        layoutInflater.inflate(R.layout.home_list_footer, null, false)
+                    fragment_board_listview.addFooterView(footer)
+                } catch (e: Exception) {
                 }
-
-                adapter = ArrayAdapter(
-                    activity,
-                    android.R.layout.simple_list_item_1,
-                    noticeList
-                )
-
-                fragment_board_listview.adapter = adapter
-
-                fragment_board_listview.setOnItemClickListener { parent, view, position, id ->
-                    val nextIntent = Intent(context, BoardActivity::class.java)
-                    nextIntent.putExtra("user_id", user_id)
-                    nextIntent.putExtra("board_sid", sidList[position])
-                    nextIntent.putExtra("contents", contentsList[position])
-                    nextIntent.putExtra("title", titleList[position])
-                    startActivity(nextIntent)
-                }
-
-                val footer: View =
-                    layoutInflater.inflate(R.layout.home_list_footer, null, false)
-                fragment_board_listview.addFooterView(footer)
-            }catch(e: Exception)
-            {
-
             }
-            activity!!.nav_home_ll.isClickable = true
-            activity!!.nav_photo_ll.isClickable = true
-            activity!!.nav_letter_ll.isClickable = true
-            activity!!.nav_plan_ll.isClickable = true
-            activity!!.nav_all_board_ll.isClickable = true
-            activity!!.nav_board_ll.isClickable = true
-            activity!!.nav_setting_ll.isClickable = true
-            activity!!.nav_calendar_ll.isClickable = true
+            if(isAdded) {
+                activity!!.nav_home_ll.isClickable = true
+                activity!!.nav_photo_ll.isClickable = true
+                activity!!.nav_letter_ll.isClickable = true
+                activity!!.nav_plan_ll.isClickable = true
+                activity!!.nav_all_board_ll.isClickable = true
+                activity!!.nav_board_ll.isClickable = true
+                activity!!.nav_setting_ll.isClickable = true
+                activity!!.nav_calendar_ll.isClickable = true
+            }
         }
     }
 }

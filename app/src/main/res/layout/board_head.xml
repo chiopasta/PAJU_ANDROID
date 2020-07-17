@@ -41,11 +41,12 @@
     <TextView
         android:background="#EFEFF4"
         android:id="@+id/board_head_contents_tx"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="10dp"
         android:paddingTop="20dp"
         android:paddingBottom="20dp"
+        android:autoLink="all"
         android:layout_marginBottom="20dp"
         android:text="" />
 

@@ -14,6 +14,7 @@ import com.bitxflow.sungmin_android.DB.User
 import com.bitxflow.sungmin_android.R
 import com.bitxflow.sungmin_android.send.SendServer
 import kotlinx.android.synthetic.main.activity_login.*
+import org.json.JSONObject
 
 class LoginActivity : AppCompatActivity() {
 
@@ -50,53 +51,70 @@ class LoginActivity : AppCompatActivity() {
             val su = SendServer()
             userId = params[0].trim()
             userPassword = params[1].trim()
-            return su.Login(params[0], params[1],"")
+
+            val url = "login"
+            val postDataParams = JSONObject()
+            postDataParams.put("userid", userId.toUpperCase())
+            postDataParams.put("password", userPassword)
+
+            return su.requestPOST(url,postDataParams)
+
         }
 
         override fun onPostExecute(result: String) {
             login_button_bt.isClickable = true
             login_pbar.visibility = View.GONE
-            if (result == "fail") {
-                Toast.makeText(baseContext, "아이디 혹은 패스워드를 다시 입력하세요", Toast.LENGTH_SHORT).show()
-            } else {
-                val addRunnable = Runnable {
+            if(result =="")
+            {
+                Toast.makeText(baseContext, "서버 통신오류, 다시 시도해주세요", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                val json = JSONObject(result)
+                val success = json.getBoolean("success")
 
-                    userDB = MemberDatabase.getInstance(baseContext)
+                if(success)
+                {
+                    val addRunnable = Runnable {
 
-                    ////LOGIN 된 유져가 있다면 multy = false
-                    val users : List<User>? =  userDB?.userDao()?.getUsers()
-                    if(users!!.size>0) {
-                        var login_user: User? = userDB?.userDao()?.getMultyLoginUser(true)
-                        if (login_user!!.multy_login!!) {
-                            login_user.multy_login = false
-                            userDB?.userDao()?.update(login_user)
-                            Log.d("bitx_log", "login 유져 존재함")
+                        userDB = MemberDatabase.getInstance(baseContext)
+
+                        ////LOGIN 된 유져가 있다면 multy = false
+                        val users : List<User>? =  userDB?.userDao()?.getUsers()
+                        if(users!!.size>0) {
+                            var login_user: User? = userDB?.userDao()?.getMultyLoginUser(true)
+                            if (login_user!!.multy_login!!) {
+                                login_user.multy_login = false
+                                userDB?.userDao()?.update(login_user)
+                                Log.d("bitx_log", "login 유져 존재함")
+                            }
                         }
+
+                        //////////////////new USER insert //////////////
+                        val user = User()
+                        user.userId = userId
+                        user.userPassword = userPassword
+                        user.userName = ""
+                        user.classSid = ""
+                        user.className = ""
+                        user.imgSrc=""
+                        user.multy_login = true
+
+                        userDB?.userDao()?.insert(user)
+                        Log.d("bitx_log","userDB insert" + userId)
+                        Log.d("bitx_log","size?" + userDB?.userDao()?.getUsers()!!.size)
+
                     }
 
-                    //////////////////new USER insert //////////////
-                    val user = User()
-                    user.userId = userId
-                    user.userPassword = userPassword
-                    user.userName = ""
-                    user.classSid = ""
-                    user.className = ""
-                    user.imgSrc=""
-                    user.multy_login = true
+                    val addThread = Thread(addRunnable)
+                    addThread.start()
 
-                    userDB?.userDao()?.insert(user)
-                    Log.d("bitx_log","userDB insert" + userId)
-                    Log.d("bitx_log","size?" + userDB?.userDao()?.getUsers()!!.size)
-
+                    setResult(Activity.RESULT_OK, Intent().putExtra("BackPress", userId))
+                    finish()
                 }
-
-                val addThread = Thread(addRunnable)
-                addThread.start()
-
-                setResult(Activity.RESULT_OK, Intent().putExtra("BackPress", userId))
-                finish()
+                else {
+                    Toast.makeText(baseContext, json.getString("message"), Toast.LENGTH_SHORT).show()
+                }
             }
-
         }
     }
 

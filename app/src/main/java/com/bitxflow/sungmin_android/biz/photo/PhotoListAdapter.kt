@@ -9,12 +9,15 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import com.bitxflow.sungmin_android.DB.MemberDatabase
 import com.bitxflow.sungmin_android.R
 import com.bitxflow.sungmin_android.biz.board.Reply
 import com.bitxflow.sungmin_android.util.DownloadImage
+import com.bumptech.glide.Glide
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper
 import com.ortiz.touchview.TouchImageView
 import kotlinx.android.synthetic.main.home_list_header.*
+import java.net.URL
 import java.util.ArrayList
 
 class PhotoListAdapter(
@@ -56,9 +59,9 @@ class PhotoListAdapter(
         title_tx.text = member[position].title
         contents_tx.text = Html.fromHtml(replyContent)
         contents_tx.movementMethod = LinkMovementMethod.getInstance()
-//        DownloadImage(img_iv).execute(member[position].pUrl)
 
-        UrlImageViewHelper.setUrlDrawable(img_iv, member[position].pUrl)
+//        UrlImageViewHelper.setUrlDrawable(img_iv, member[position].pUrl,R.drawable.profileimage)
+        Glide.with(convertView).load(member[position].pUrl).placeholder(R.drawable.loading).override(1000,600).into(img_iv)
 
         return convertView
     }

@@ -41,6 +41,7 @@ class SettingFragment : Fragment() {
 
         view.setting_account_bt.setOnClickListener{
             val nextIntent = Intent(context, AccountActivity::class.java)
+            nextIntent.putExtra("user_id", user_id)
             startActivity(nextIntent)
         }
         view.setting_multy_login_bt.setOnClickListener{
@@ -48,15 +49,16 @@ class SettingFragment : Fragment() {
             startActivity(nextIntent)
         }
 
-        activity!!.nav_home_ll.isClickable = true
-        activity!!.nav_photo_ll.isClickable = true
-        activity!!.nav_letter_ll.isClickable = true
-        activity!!.nav_plan_ll.isClickable = true
-        activity!!.nav_all_board_ll.isClickable = true
-        activity!!.nav_board_ll.isClickable = true
-        activity!!.nav_setting_ll.isClickable = true
-        activity!!.nav_calendar_ll.isClickable = true
-
+        if(isAdded) {
+            activity!!.nav_home_ll.isClickable = true
+            activity!!.nav_photo_ll.isClickable = true
+            activity!!.nav_letter_ll.isClickable = true
+            activity!!.nav_plan_ll.isClickable = true
+            activity!!.nav_all_board_ll.isClickable = true
+            activity!!.nav_board_ll.isClickable = true
+            activity!!.nav_setting_ll.isClickable = true
+            activity!!.nav_calendar_ll.isClickable = true
+        }
         return view
     }
 }
