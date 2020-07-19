@@ -14,8 +14,8 @@ android {
         applicationId "com.bitxflow.sungmin_android"
         minSdkVersion 17
         targetSdkVersion 28
-        versionCode 112
-        versionName "1.12"
+        versionCode 114
+        versionName "1.14"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

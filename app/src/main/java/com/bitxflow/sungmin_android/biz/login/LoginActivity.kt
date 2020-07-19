@@ -27,13 +27,6 @@ class LoginActivity : AppCompatActivity() {
 
         login_pbar.visibility = View.GONE
 
-//        id="ssc001087"
-
-//        login_bt.setOnClickListener{
-//            SendTask().execute("ssc001236","20150701")
-////            SendTask().execute("ssc001087 ","20121228")
-//        }
-
         login_button_bt.setOnClickListener{
             val id = input_id_et.text.toString()
             val pw = password_et.text.toString()
@@ -80,10 +73,10 @@ class LoginActivity : AppCompatActivity() {
 
                         ////LOGIN 된 유져가 있다면 multy = false
                         val users : List<User>? =  userDB?.userDao()?.getUsers()
-                        if(users!!.size>0) {
+                        if(users!!.isNotEmpty()) {
                             var login_user: User? = userDB?.userDao()?.getMultyLoginUser(true)
                             if (login_user!!.multy_login!!) {
-                                login_user.multy_login = false
+                                    login_user.multy_login = false
                                 userDB?.userDao()?.update(login_user)
                                 Log.d("bitx_log", "login 유져 존재함")
                             }

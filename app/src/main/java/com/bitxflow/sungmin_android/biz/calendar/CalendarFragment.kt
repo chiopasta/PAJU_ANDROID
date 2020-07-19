@@ -28,6 +28,7 @@ class CalendarFragment : Fragment() {
     private var user_id: String = ""
     private var className: String = ""
 
+    @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         user_id = arguments!!.getString("user_id")
@@ -86,7 +87,6 @@ class CalendarFragment : Fragment() {
 
         override fun onPostExecute(result: String) {
 //            Log.d("bitx_log", "calendar result :$result")
-            var result = ""
             if(result.equals("")) {
                 Toast.makeText(activity, "다시 시도해 주세요", Toast.LENGTH_SHORT).show()
             }
@@ -96,7 +96,7 @@ class CalendarFragment : Fragment() {
                     activity!!.main_progressbar.visibility = View.GONE
 
                     val `object` = JSONObject(result)
-                    val count: Int = `object`.getInt("eventCount")
+//                    val count: Int = `object`.getInt("eventCount")
 
                     val planList = `object`.getJSONArray("eventList")
 
@@ -121,10 +121,10 @@ class CalendarFragment : Fragment() {
                         var sameDate = false
 
                         for (j in 0 until startDyList.size) {
-                            val startDyFromList = startDyList.get(j)
-                            val startDate = transFormat.parse(startDyFromList)
+                            val startDyFromList = startDyList[j]
+                            val startDate1 = transFormat.parse(startDyFromList)
                             var calStartDate = Calendar.getInstance()
-                            calStartDate.time = startDate
+                            calStartDate.time = startDate1
 
                             if (day.day == calStartDate.get(Calendar.DATE))// 같은날짜?
                             {
@@ -133,7 +133,7 @@ class CalendarFragment : Fragment() {
                                     10,
                                     16
                                 ) + " " + json.getString("title")
-                                titleList.set(j, title)
+                                titleList[j] = title
                                 sameDate = true
                             }
                         }
@@ -151,8 +151,7 @@ class CalendarFragment : Fragment() {
 
                     }
 
-                    view!!.calendarView.setOnDateChangedListener(OnDateSelectedListener { widget, date, selected ->
-                        Log.d("bitx_log", "day selceted , " + date.toString())
+                    view!!.calendarView.setOnDateChangedListener(OnDateSelectedListener { _, date, selected ->
                         for (i in 0 until startDyList.size) {
                             val transFormat =
                                 SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
@@ -160,7 +159,6 @@ class CalendarFragment : Fragment() {
                             val cal = Calendar.getInstance()
                             cal.time = startDate
                             if (cal.get(Calendar.DATE) == date.day) {
-                                Log.d("bitx_log", "same" + startDyList.get(i))
                                 val builder = AlertDialog.Builder(context)
                                 builder.setTitle(
                                     "" + cal.get(Calendar.YEAR) + "년 " + (cal.get(Calendar.MONTH) + 1) + "월 " + cal.get(
@@ -168,7 +166,7 @@ class CalendarFragment : Fragment() {
                                     ) + "일 일정"
                                 )
                                 builder.setMessage(
-                                    titleList.get(i)
+                                    titleList[i]
                                 )
 
                                 builder.setPositiveButton("확인") { dialog, which ->

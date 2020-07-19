@@ -98,7 +98,7 @@ class BoardActivity : AppCompatActivity() {
                     Uri.parse(img_url)
                 val videoView = VideoView(applicationContext)
                 board_head_ll.addView(videoView)
-                Log.d("bitx_log","videoView")
+//                Log.d("bitx_log","videoView")
              val mediaController = MediaController(applicationContext)
                 mediaController.setAnchorView(videoView)
                 videoView.setMediaController(mediaController)
@@ -263,7 +263,7 @@ class BoardActivity : AppCompatActivity() {
 
         override fun onPostExecute(result: String) {
 
-            Log.d("bitx_log","result : $result")
+//            Log.d("bitx_log","result : $result")
             if(result.equals(""))
                 Toast.makeText(this@BoardActivity,"다시 시도해 주세요", Toast.LENGTH_SHORT).show()
             else {
@@ -290,7 +290,7 @@ class BoardActivity : AppCompatActivity() {
                     }
 
                     if (count == 0) {
-                        Log.d("bitx_log", "in")
+//                        Log.d("bitx_log", "in")
                         val reply = Reply(
                             "0", "", "댓글이 없습니다"
                         )
@@ -317,7 +317,7 @@ class BoardActivity : AppCompatActivity() {
 
         override fun doInBackground(vararg params: String): String {
 //            content = params[1]
-            Log.d("bitx_log","send task in : " + params[0])
+//            Log.d("bitx_log","send task in : " + params[0])
             val su = SendServer()
             val url = "photo/comment/" + boardSid
             val postDataParams = JSONObject()
@@ -336,7 +336,7 @@ class BoardActivity : AppCompatActivity() {
 //                )
 //            )
 //            adapter.notifyDataSetChanged()
-            Log.d("bitx_log","send reply result + $result")
+//            Log.d("bitx_log","send reply result + $result")
             getReplyListTask().execute(type,boardSid)
         }
     }

@@ -149,9 +149,10 @@ class HomeFragment : Fragment() {
 
             }
 
-            mobilePush_listView.addHeaderView(header)
-            mobilePush_listView.addFooterView(footer)
-
+            if(isAdded) {
+                mobilePush_listView.addHeaderView(header)
+                mobilePush_listView.addFooterView(footer)
+            }
 
             if(result.equals(""))
                 Toast.makeText(activity,"다시 시도해 주세요", Toast.LENGTH_SHORT).show()
