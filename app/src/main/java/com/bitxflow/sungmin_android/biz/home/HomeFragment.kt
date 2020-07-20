@@ -97,12 +97,12 @@ class HomeFragment : Fragment() {
             if (isAdded) {
                 activity!!.main_progressText.text = ""
                 activity!!.main_progressbar.visibility = View.GONE
-            }
-            val header: View =
-                layoutInflater.inflate(R.layout.home_list_header, null, false)
 
-            val footer: View =
-                layoutInflater.inflate(R.layout.home_list_footer, null, false)
+                val header: View =
+                    layoutInflater.inflate(R.layout.home_list_header, null, false)
+
+                val footer: View =
+                    layoutInflater.inflate(R.layout.home_list_footer, null, false)
 
 
             /////////////// ATTEND /////////////////////////////////
@@ -149,11 +149,10 @@ class HomeFragment : Fragment() {
 
             }
 
-            if(isAdded) {
                 mobilePush_listView.addHeaderView(header)
                 mobilePush_listView.addFooterView(footer)
-            }
 
+            }
             if(result.equals(""))
                 Toast.makeText(activity,"다시 시도해 주세요", Toast.LENGTH_SHORT).show()
 

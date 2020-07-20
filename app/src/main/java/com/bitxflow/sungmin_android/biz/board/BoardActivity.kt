@@ -55,8 +55,6 @@ class BoardActivity : AppCompatActivity() {
     var json_arrary : JSONArray? = null
     private var userDB: MemberDatabase? = null
 
-    private val MY_PERMISSION_REQUEST_STORAGE = 100
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_board)
@@ -69,10 +67,8 @@ class BoardActivity : AppCompatActivity() {
         contents = intent.extras.getString("contents")
         val attachmentList = intent.extras.getString("attachmentList")
 
-//        boardSid = intent.extras.getString("board_sid")
-
         json_arrary = JSONArray(attachmentList)
-
+        Log.d("bitx_log","json_arrary : $json_arrary")
         val header: View =
             layoutInflater.inflate(R.layout.board_head, null, false)
 
@@ -82,15 +78,23 @@ class BoardActivity : AppCompatActivity() {
         board_progressbar.visibility = View.GONE
         board_listview.addHeaderView(header)
 
-
         val photoCount = json_arrary!!.length()
+
+        var names: MutableList<String> = ArrayList()
+        var count = 0
 
         for(i in 0 until photoCount)
         {
             board_progressbar.visibility = View.VISIBLE
             val json = json_arrary!!.getJSONObject(i)
 
-            val img_url = "https://d1d2thkw8tiq2x.cloudfront.net/" + json.getString("path")
+            var img_url = ""
+            try {
+                img_url = "https://d1d2thkw8tiq2x.cloudfront.net/" + json.getString("path")
+            }catch(e: Exception)
+            {
+                continue;
+            }
             val EXE = img_url.substring(img_url.length - 3, img_url.length).toUpperCase()
             if(EXE=="MP4")
             {
@@ -124,7 +128,9 @@ class BoardActivity : AppCompatActivity() {
                 board_progressbar.visibility = View.GONE
 
 
-                iv.id = i
+                iv.id = count++
+                val name = json.getString("name")
+                names.add(name)
 
 //                val picasso = Picasso.get()
 //                picasso.load(img_url).into(iv)
@@ -139,21 +145,16 @@ class BoardActivity : AppCompatActivity() {
                     )
 
                     builder.setPositiveButton("네") { dialog, which ->
-                        val currentDateTime = Calendar.getInstance().time
-                        var dateFormat = SimpleDateFormat("yyyyMMddHHmmss", Locale.KOREA).format(currentDateTime)
-                        val name = dateFormat + i.toString()
                         saveDrawable(iv, name, applicationContext)
                         Toast.makeText(applicationContext, "저장 되었습니다.", Toast.LENGTH_SHORT).show()
                     }
 
                     builder.setNeutralButton("전체저장하기") { dialog, _ ->
-                        for(i in 0 until photoCount)
+                        for(i in 0 until count)
                         {
                             val ii = findViewById<ImageView>(i)
-                            val currentDateTime = Calendar.getInstance().time
-                            var dateFormat = SimpleDateFormat("yyyyMMddHHmmss", Locale.KOREA).format(currentDateTime)
-                            val name = dateFormat + i.toString()
-                            saveDrawable(ii, name, applicationContext)
+                            saveDrawable(ii, names[i], applicationContext)
+                            Toast.makeText(applicationContext, "저장 되었습니다.", Toast.LENGTH_SHORT).show()
                         }
                         dialog.dismiss()
                     }
