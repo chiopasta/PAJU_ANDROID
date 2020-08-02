@@ -282,7 +282,8 @@ class HomeFragment : Fragment() {
 
                 if (imgSrc.isNotEmpty()) {
                     val bmp = BitmapFactory.decodeFile(imgSrc)
-                    info_iv.setImageBitmap(bmp)
+                    if(bmp!=null)
+                        info_iv.setImageBitmap(bmp)
                 }
 
                 FirebaseMessaging.getInstance().subscribeToTopic(fcm_topic)
@@ -295,12 +296,16 @@ class HomeFragment : Fragment() {
 
                 if (`object`.has("imagepath")) {
                     val url = `object`.getString("imagepath")
-                    meal_date_tx.text = ("오늘의 식단(" + displaydate + ")")
-                    meal_menu_tx.text = menu
-                    DownloadImage(meal_iv).execute(url)
+                    if(isAdded) {
+                        meal_date_tx.text = ("오늘의 식단(" + displaydate + ")")
+                        meal_menu_tx.text = menu
+                        DownloadImage(meal_iv).execute(url)
+                    }
                 } else {
-                    meal_date_tx.text = ("오늘의 식단(" + displaydate + ")")
-                    meal_menu_tx.text = menu
+                    if(isAdded) {
+                        meal_date_tx.text = ("오늘의 식단(" + displaydate + ")")
+                        meal_menu_tx.text = menu
+                    }
                 }
             }
 
