@@ -33,8 +33,8 @@ import java.util.*
 
 class HomeFragment : Fragment() {
 
-    private var user_id: String = ""
-    private var imgSrc: String = ""
+    private var user_id: String? = ""
+    private var imgSrc: String? = ""
 
     private var userDB: MemberDatabase? = null
     private var isAbsent: Boolean = false
@@ -86,7 +86,7 @@ class HomeFragment : Fragment() {
             val su = SendServer()
             val url = "home"
             val postDataParams = JSONObject()
-            postDataParams.put("userid", user_id.toUpperCase())
+            postDataParams.put("userid", user_id!!.toUpperCase())
 
             return su.requestPOST(url,postDataParams)
         }
@@ -106,7 +106,7 @@ class HomeFragment : Fragment() {
 
 
             /////////////// ATTEND /////////////////////////////////
-            header.late_absent_switch.setOnCheckedChangeListener { buttonView, isChecked ->
+            header.late_absent_switch.setOnCheckedChangeListener { _, isChecked ->
                 isAbsent = isChecked
             }
 
@@ -167,7 +167,7 @@ class HomeFragment : Fragment() {
                     noticeList.add("모바일 알림이 없습니다")
                     if (isAdded) {
                         adapter = ArrayAdapter(
-                            activity,
+                            activity!!,
                             android.R.layout.simple_list_item_1,
                             noticeList
                         )
@@ -196,7 +196,7 @@ class HomeFragment : Fragment() {
                             noticeList.add(json.getString("mobileNoticeDate") + "     " + content)
                         else
                             noticeList.add(json.getString("mobileNoticeDate") + "     " + short_content)
-                        noticeDateList!!.add(json.getString("mobileNoticeDate"))
+                        noticeDateList.add(json.getString("mobileNoticeDate"))
                         noticeContentList!!.add(content)
 
                     }
@@ -280,7 +280,7 @@ class HomeFragment : Fragment() {
                 val modifyThread = Thread(ModifyRunnable)
                 modifyThread.start()
 
-                if (imgSrc.isNotEmpty()) {
+                if (imgSrc!!.isNotEmpty()) {
                     val bmp = BitmapFactory.decodeFile(imgSrc)
                     if(bmp!=null)
                         info_iv.setImageBitmap(bmp)
@@ -332,7 +332,7 @@ class HomeFragment : Fragment() {
             val attendanceReason = params[1]
 
 //            val url = "https://m.bitxdev.com/home/attendance/" + user_id.toUpperCase()
-            val url = "home/attendance/" + user_id.toUpperCase()
+            val url = "home/attendance/" + user_id!!.toUpperCase()
             val postDataParams = JSONObject()
             postDataParams.put("attendanceStatus", attendanceStatus)
             postDataParams.put("attendanceReason", attendanceReason)
