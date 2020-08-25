@@ -54,6 +54,17 @@
         android:text="로그인"
         android:textColor="#FF007F" />
 
+    <Button
+            android:id="@+id/pw_reset_bt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/password_et"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/login_button_bt"
+            android:gravity="center"
+            android:text="비밀번호 재설정"
+            android:textColor="#FF007F" />
+
     <ProgressBar
         android:id="@+id/login_pbar"
         style="?android:attr/progressBarStyleLarge"

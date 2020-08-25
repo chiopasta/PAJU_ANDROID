@@ -25,8 +25,8 @@ class HomeLetterFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        user_id = arguments!!.getString("user_id")
-        className = arguments!!.getString("className")
+        user_id = arguments!!.getString("user_id").toString()
+        className = arguments!!.getString("className").toString()
     }
 
     override fun onCreateView(
@@ -90,7 +90,7 @@ class HomeLetterFragment : Fragment() {
                         noticeList.add("가정통신문이 없습니다")
                         if (isAdded) {
                             adapter = ArrayAdapter(
-                                activity,
+                                activity!!,
                                 android.R.layout.simple_list_item_1,
                                 noticeList
                             )
@@ -114,7 +114,7 @@ class HomeLetterFragment : Fragment() {
                         }
 
                         adapter = ArrayAdapter(
-                            activity,
+                            activity!!,
                             android.R.layout.simple_list_item_1,
                             noticeList
                         )

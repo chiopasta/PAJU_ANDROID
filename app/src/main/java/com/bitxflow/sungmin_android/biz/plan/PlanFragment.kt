@@ -35,8 +35,8 @@ class PlanFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        user_id = arguments!!.getString("user_id")
-        className = arguments!!.getString("className")
+        user_id = arguments!!.getString("user_id").toString()
+        className = arguments!!.getString("className").toString()
     }
 
     override fun onCreateView(
@@ -95,7 +95,7 @@ class PlanFragment : Fragment() {
                         noticeList.add("교육활동안이 없습니다")
                         if (isAdded) {
                             adapter = ArrayAdapter(
-                                activity,
+                                activity!!,
                                 android.R.layout.simple_list_item_1,
                                 noticeList
                             )
@@ -120,7 +120,7 @@ class PlanFragment : Fragment() {
 
                         if (isAdded) {
                             adapter = ArrayAdapter(
-                                activity,
+                                activity!!,
                                 android.R.layout.simple_list_item_1,
                                 noticeList
                             )

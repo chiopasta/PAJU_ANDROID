@@ -30,7 +30,7 @@ class AllBoardFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        user_id = arguments!!.getString("user_id")
+        user_id = arguments!!.getString("user_id").toString()
     }
 
     override fun onCreateView(
@@ -104,7 +104,7 @@ class AllBoardFragment : Fragment() {
                     }
 
                     adapter = ArrayAdapter(
-                        activity,
+                        activity!!,
                         android.R.layout.simple_list_item_1,
                         titleList
                     )

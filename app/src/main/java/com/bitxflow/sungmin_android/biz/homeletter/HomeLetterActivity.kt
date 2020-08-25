@@ -13,7 +13,7 @@ class HomeLetterActivity : AppCompatActivity() {
         setContentView(R.layout.activity_home_letter)
 
         val intent = intent
-        val url = intent.extras.getString("content")
+        val url = intent.extras!!.getString("content")
 
         DownloadImage(letter_image).execute(url)
 //        DownloadImageTask(meal_iv).execute(url)

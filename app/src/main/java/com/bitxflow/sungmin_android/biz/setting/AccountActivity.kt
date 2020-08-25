@@ -31,7 +31,7 @@ class AccountActivity : AppCompatActivity() {
         setContentView(R.layout.activity_account)
 
         val intent = intent
-        val user_id = intent.extras.getString("user_id")
+        val user_id = intent.extras!!.getString("user_id")
 
         pw_bt.setOnClickListener {
             val builder = AlertDialog.Builder(this)

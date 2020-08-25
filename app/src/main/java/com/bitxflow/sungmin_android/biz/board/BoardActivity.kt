@@ -60,12 +60,12 @@ class BoardActivity : AppCompatActivity() {
         setContentView(R.layout.activity_board)
 
         val intent = intent
-        type = intent.extras.getString("type")
-        boardSid = intent.extras.getString("board_sid")
-        user_id = intent.extras.getString("user_id")
-        val title = intent.extras.getString("title")
-        contents = intent.extras.getString("contents")
-        val attachmentList = intent.extras.getString("attachmentList")
+        type = intent.extras!!.getString("type").toString()
+        boardSid = intent.extras!!.getString("board_sid").toString()
+        user_id = intent.extras!!.getString("user_id").toString()
+        val title = intent.extras!!.getString("title").toString()
+        contents = intent.extras!!.getString("contents").toString()
+        val attachmentList = intent.extras!!.getString("attachmentList").toString()
 
         json_arrary = JSONArray(attachmentList)
         Log.d("bitx_log","json_arrary : $json_arrary")

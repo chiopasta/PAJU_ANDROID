@@ -209,11 +209,13 @@ class HomeFragment : Fragment() {
                             noticeContentList.dropLast(count - SHOW_COUNT).toMutableList()
                     }
                     if (isAdded) {
-                        adapter = ArrayAdapter(
-                            activity,
-                            android.R.layout.simple_list_item_1,
-                            noticeList
-                        )
+                        adapter = activity?.let {
+                            ArrayAdapter(
+                                it,
+                                android.R.layout.simple_list_item_1,
+                                noticeList
+                            )
+                        }
 
                         mobilePush_listView.adapter = adapter
 

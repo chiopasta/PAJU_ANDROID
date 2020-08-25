@@ -44,7 +44,7 @@ class PhotoFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        user_id = arguments!!.getString("user_id")
+        user_id = arguments!!.getString("user_id").toString()
     }
 
     override fun onCreateView(

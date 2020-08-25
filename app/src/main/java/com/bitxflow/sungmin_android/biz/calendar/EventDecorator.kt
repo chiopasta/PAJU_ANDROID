@@ -11,12 +11,12 @@ import com.prolificinteractive.materialcalendarview.spans.DotSpan
 
 class EventDecorator(
     color: Int,
-    dates: Collection<CalendarDay?>?,
+    dates: MutableList<CalendarDay>,
     context: Activity
 ) :
     DayViewDecorator {
     private val color: Int
-    private val dates: HashSet<CalendarDay>
+    private val dates:  MutableList<CalendarDay>
     override fun shouldDecorate(day: CalendarDay): Boolean {
         return dates.contains(day)
     }
@@ -29,6 +29,6 @@ class EventDecorator(
     init {
 //        drawable = context.resources.getDrawable(R.drawable.more)
         this.color = color
-        this.dates = HashSet<CalendarDay>(dates)
+        this.dates = dates
     }
 }

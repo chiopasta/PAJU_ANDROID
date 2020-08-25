@@ -1,6 +1,7 @@
 package com.bitxflow.sungmin_android.biz.login
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +9,8 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
 import android.view.View
+import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import com.bitxflow.sungmin_android.DB.MemberDatabase
 import com.bitxflow.sungmin_android.DB.User
@@ -34,6 +37,31 @@ class LoginActivity : AppCompatActivity() {
             SendTask().execute(id,pw)
             login_button_bt.isClickable = false
         }
+
+        pw_reset_bt.setOnClickListener {
+            val builder = AlertDialog.Builder(this)
+            val dialogView = layoutInflater.inflate(R.layout.pw_reset_dialog, null)
+            val dialog_id = dialogView.findViewById<EditText>(R.id.pw_setting_id_et)
+            val dialog_email = dialogView.findViewById<EditText>(R.id.pw_setting_email_et)
+            val setting_tx = dialogView.findViewById<TextView>(R.id.pw_setting_tx)
+            setting_tx.text = "학번과 등록된 이메일을 입력해주세요.\n '확인'을 누르면 새로운 비밀번호를 이메일로 전송해 드립니다."
+
+            builder.setView(dialogView)
+                .setPositiveButton("확인") { _, _ ->
+                    val id = dialog_id.text.toString()
+                    val email = dialog_email.text.toString()
+                    reSetPwSendTask().execute(id,email)
+                }
+                .setNegativeButton("취소") { _, _ ->
+                    login_pbar.visibility = View.INVISIBLE
+                    login_button_bt.isClickable = true
+                }
+                .show()
+
+            login_pbar.visibility = View.VISIBLE
+            login_button_bt.isClickable = false
+        }
+
     }
 
     internal inner class SendTask : AsyncTask<String, String, String>() {
@@ -106,6 +134,47 @@ class LoginActivity : AppCompatActivity() {
                 }
                 else {
                     Toast.makeText(baseContext, json.getString("message"), Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+
+    internal inner class reSetPwSendTask : AsyncTask<String, String, String>() {
+        var userId : String =""
+        var email : String = ""
+
+        override fun doInBackground(vararg params: String): String {
+            val su = SendServer()
+            userId = params[0].trim()
+            email = params[1].trim()
+
+            val url = "login/resetpassword"
+            val postDataParams = JSONObject()
+            postDataParams.put("userid", userId.toUpperCase())
+            postDataParams.put("email", email)
+
+            return su.requestPOST(url,postDataParams)
+
+        }
+
+        override fun onPostExecute(result: String) {
+            Log.d("bitx_log","result : $result")
+            login_button_bt.isClickable = true
+            login_pbar.visibility = View.GONE
+            if(result =="")
+                Toast.makeText(baseContext, "서버 통신오류, 다시 시도해주세요", Toast.LENGTH_SHORT).show()
+            else
+            {
+                val json = JSONObject(result)
+                val success = json.getBoolean("success")
+
+                if(success)
+                    Toast.makeText(baseContext, "이메일을 확인해주세요", Toast.LENGTH_SHORT).show()
+                else
+                {
+                    val message = json.getString("message").toString()
+                    Toast.makeText(baseContext, message, Toast.LENGTH_SHORT).show()
                 }
             }
         }

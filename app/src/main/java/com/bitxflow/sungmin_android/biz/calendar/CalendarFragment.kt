@@ -31,8 +31,8 @@ class CalendarFragment : Fragment() {
     @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        user_id = arguments!!.getString("user_id")
-        className = arguments!!.getString("className")
+        user_id = arguments!!.getString("user_id").toString()
+        className = arguments!!.getString("className").toString()
     }
 
     override fun onCreateView(
