@@ -24,6 +24,9 @@ import com.bitxflow.sungmin_android.biz.photo.PhotoFragment
 import com.bitxflow.sungmin_android.biz.plan.PlanFragment
 import com.bitxflow.sungmin_android.biz.setting.SettingFragment
 import com.bitxflow.sungmin_android.biz.splash.SplashActivity
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException
+import com.google.android.gms.common.GooglePlayServicesRepairableException
+import com.google.android.gms.security.ProviderInstaller
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.iid.FirebaseInstanceId
 import kotlinx.android.synthetic.main.activity_main.*
@@ -31,6 +34,10 @@ import kotlinx.android.synthetic.main.home_list_header.*
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.security.KeyManagementException
+import java.security.NoSuchAlgorithmException
+import javax.net.ssl.SSLContext
+import javax.net.ssl.SSLEngine
 
 
 class MainActivity : AppCompatActivity() {

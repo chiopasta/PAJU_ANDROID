@@ -16,8 +16,15 @@ import com.bitxflow.sungmin_android.DB.MemberDatabase
 import com.bitxflow.sungmin_android.DB.User
 import com.bitxflow.sungmin_android.R
 import com.bitxflow.sungmin_android.send.SendServer
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException
+import com.google.android.gms.common.GooglePlayServicesRepairableException
+import com.google.android.gms.security.ProviderInstaller
 import kotlinx.android.synthetic.main.activity_login.*
 import org.json.JSONObject
+import java.security.KeyManagementException
+import java.security.NoSuchAlgorithmException
+import javax.net.ssl.SSLContext
+import javax.net.ssl.SSLEngine
 
 class LoginActivity : AppCompatActivity() {
 
@@ -27,6 +34,26 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        ProviderInstaller.installIfNeeded(getApplicationContext());
+        val sslContext: SSLContext = SSLContext.getInstance("TLSv1.2")
+        sslContext.init(null, null, null)
+        val engine: SSLEngine = sslContext.createSSLEngine()
+        try {
+            ProviderInstaller.installIfNeeded(applicationContext)
+            val sslContext: SSLContext
+            sslContext = SSLContext.getInstance("TLSv1.2")
+            sslContext.init(null, null, null)
+            sslContext.createSSLEngine()
+        } catch (e: GooglePlayServicesRepairableException) {
+            e.printStackTrace()
+        } catch (e: GooglePlayServicesNotAvailableException) {
+            e.printStackTrace()
+        } catch (e: NoSuchAlgorithmException) {
+            e.printStackTrace()
+        } catch (e: KeyManagementException) {
+            e.printStackTrace()
+        }
 
         login_pbar.visibility = View.GONE
 

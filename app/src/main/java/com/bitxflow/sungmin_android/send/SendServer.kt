@@ -62,8 +62,8 @@ class SendServer {
     fun requestPOST(_url: String?, postDataParams: JSONObject): String {
         val url = URL(localhost + _url)
         val conn: HttpURLConnection = url.openConnection() as HttpURLConnection
-        conn.readTimeout = 3000
-        conn.connectTimeout = 3000
+        conn.readTimeout = 7000
+        conn.connectTimeout = 7000
         conn.requestMethod = "POST"
         conn.setRequestProperty("Accept","application/json")
         conn.doInput = true
@@ -81,6 +81,7 @@ class SendServer {
             }
         }catch(e: Exception)
         {
+            Log.d("btix_log",e.toString());
             return ""
         }
         return ""

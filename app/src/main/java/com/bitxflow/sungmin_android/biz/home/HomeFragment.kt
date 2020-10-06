@@ -282,7 +282,7 @@ class HomeFragment : Fragment() {
                 val modifyThread = Thread(ModifyRunnable)
                 modifyThread.start()
 
-                if (imgSrc!!.isNotEmpty()) {
+                if (!imgSrc.isNullOrBlank()) {
                     val bmp = BitmapFactory.decodeFile(imgSrc)
                     if(bmp!=null)
                         info_iv.setImageBitmap(bmp)

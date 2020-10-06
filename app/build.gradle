@@ -14,8 +14,8 @@ android {
         applicationId "com.bitxflow.sungmin_android"
         minSdkVersion 17
         targetSdkVersion 29
-        versionCode 115
-        versionName "1.15"
+        versionCode 116
+        versionName "1.16"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -49,6 +49,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.4.2'
     implementation 'com.github.MikeOrtiz:TouchImageView:2.3.2' // Android X
+    implementation 'com.google.android.gms:play-services-auth:17.0.0'
 
     implementation 'com.google.firebase:firebase-analytics:17.4.3'
     implementation 'com.google.firebase:firebase-messaging:20.2.1'
