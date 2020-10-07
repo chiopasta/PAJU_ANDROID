@@ -23,6 +23,7 @@ fun saveDrawable(
     bitmap = try {
         Bitmap.createBitmap(bounds.width(), bounds.height(), Bitmap.Config.ARGB_8888)
     } catch (e: Exception) {
+        Log.d("bitx_log","저장 에러 " + e.toString())
         return 0
     }
     if (bitmap == null) return 0
