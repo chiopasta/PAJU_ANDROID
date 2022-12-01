@@ -74,4 +74,13 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="23dp" />
 
+    <TextView
+            android:id="@+id/privacy_tx"
+            android:layout_alignRight="@+id/password_et"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/pw_reset_bt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="개인정보 처리 방침" />
+
 </RelativeLayout>

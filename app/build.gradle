@@ -9,11 +9,11 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.gms.google-services'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 31
     defaultConfig {
         applicationId "com.bitxflow.pjik"
         minSdkVersion 17
-        targetSdkVersion 29
+        targetSdkVersion 31
         versionCode 117
         versionName "1.17"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
