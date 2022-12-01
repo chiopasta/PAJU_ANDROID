@@ -8,6 +8,80 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:625559191681:android:febdc7df6ad0fe3ae0cd80",
+        "android_client_info": {
+          "package_name": "com.bitxflow.pajuglc_android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "625559191681-lmcnp3k8pnpapm3cu61320dk2vl89m5n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC5MNCT6uAvnaMj8mZYxEsJTeTc7J5l8Qc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "625559191681-lmcnp3k8pnpapm3cu61320dk2vl89m5n.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "625559191681-5ciu6v6c6opmt1gm2q7o52sci0rtmk26.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.bitxflow.pjik",
+                "app_store_id": "1227562715"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:625559191681:android:5f77ba8b116bd576e0cd80",
+        "android_client_info": {
+          "package_name": "com.bitxflow.pjik"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "625559191681-lmcnp3k8pnpapm3cu61320dk2vl89m5n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC5MNCT6uAvnaMj8mZYxEsJTeTc7J5l8Qc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "625559191681-lmcnp3k8pnpapm3cu61320dk2vl89m5n.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "625559191681-5ciu6v6c6opmt1gm2q7o52sci0rtmk26.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.bitxflow.pjik",
+                "app_store_id": "1227562715"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:625559191681:android:1cf4cdea12ba9614e0cd80",
         "android_client_info": {
           "package_name": "com.bitxflow.sungmin_android"
@@ -32,11 +106,11 @@
               "client_type": 3
             },
             {
-              "client_id": "625559191681-8cdo84rvbu2tk82p4e686a9besbm6o29.apps.googleusercontent.com",
+              "client_id": "625559191681-5ciu6v6c6opmt1gm2q7o52sci0rtmk26.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.bitxflow.sungmin-i",
-                "app_store_id": "976859102"
+                "bundle_id": "com.bitxflow.pjik",
+                "app_store_id": "1227562715"
               }
             }
           ]

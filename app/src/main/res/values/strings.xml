@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">성민유치원</string>
+    <string name="app_name">파주국제유치원</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
-    <string name="default_notification_channel_id">sungmin_i</string>
+    <string name="default_notification_channel_id">pjik</string>
 </resources>
