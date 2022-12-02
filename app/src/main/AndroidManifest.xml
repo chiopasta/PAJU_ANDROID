@@ -25,6 +25,7 @@
         <activity android:name="com.bitxflow.pjik.biz.splash.SplashActivity" />
         <activity android:name="com.bitxflow.pjik.biz.login.LoginActivity" />
         <activity
+            android:exported="true"
             android:name="com.bitxflow.pjik.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
